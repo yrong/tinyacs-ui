@@ -1,0 +1,95 @@
+<template name="UnlinkDevice">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+      <div style="margin-bottom: 25px">
+        <h1 class="page-title no-margin">
+          <div class="connect-icon"></div>
+          {{i18n networkOperations}}
+          <span>&gt;&nbsp;{{i18n "unlinkedDevices"}}</span>
+        </h1>
+      </div>
+      <h1>{{i18n "unlinkedDevices"}}</h1>
+      {{#if ready}}
+        {{#if error}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>
+              Error!
+            </strong>
+            {{error}}
+          </div>
+        {{else}}
+          {{> UnlinkDeviceTable}}
+        {{/if}}
+      {{else}}
+        <div>
+          <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i>{{i18n 'loading'}}</h1>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+<template name="UnlinkDeviceTable">
+  <div class="table-responsive margin-top-10">
+    <table id="table-status" class="table table-hover">
+      <thead>
+        <tr>
+          <th>{{i18n "serialNumber"}}</th>
+          <th>{{i18n "ipAddress"}}</th>
+          <th>{{i18n "model"}}</th>
+          <th>{{i18n "softwareVersion"}}</th>
+          <th>{{i18n "previousSubscriber"}}</th>
+          <th>{{i18n "discoveryTime"}}</th>
+          <th>{{i18n "lastInformTime"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each result}}
+          <tr>
+            <td>{{serialNumber}}</td>
+            <td>{{ipAddress}}</td>
+            <td>{{modelName}}</td>
+            <td>{{softwareVersion}}</td>
+            <td>{{prevSubscriber}}</td>
+            <td>{{timestamp "createTime"}}</td>
+            <td>{{timestamp "lastInformTime"}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class="pull-left">
+    Showing
+    <span>
+      <strong>{{startNumber}}</strong>
+    </span>to
+    <span>
+      <strong>{{endNumber}}</strong>
+    </span>of
+    <span style="color:#3b9ff3">
+      <strong>{{count}}</strong>
+    </span>
+    entries
+  </div>
+  
+  <div class="pull-right">
+    <ul class="pagination" style="margin:0;">
+      <li id="first">
+        <a href="javascript::void(0)"><i class="fa fa-angle-double-left"></i></a>
+      </li>
+      <li id="pre"><a href="javascript:void(0)"><i class="fa fa-angle-left"></i></a>
+      </li>
+      {{#each pageNumbers}}
+        <li id="{{pageNumber}}"><a href="javascript:void(0)">{{pageNumber}}</a>
+        </li>
+      {{/each}}
+      <li id="post"><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a>
+      </li>
+      <li id="last">
+        <a href="javascript::void(0)"><i class="fa fa-angle-double-right"></i></a>
+      </li>
+    </ul>
+  </div>
+</template>

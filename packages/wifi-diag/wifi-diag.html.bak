@@ -1,0 +1,367 @@
+<template name="wifiRadio">
+  
+    <h5>
+      <strong>Radio Status</strong>
+    </h5>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Wireless Radio</td>
+          <td>{{radioEnable}}</td>
+        </tr>
+        <tr>
+          <td>Wireless Mode</td>
+          <td>{{wirelessMode}}</td>
+        </tr>
+        <tr>
+          <td>Channel Mode</td>
+          <td>{{channelModel}}</td>
+        </tr>
+        <tr>
+          <td>Channel Bandwidth</td>
+          <td>{{channelBandwidth}}</td>
+        </tr>
+        <tr>
+          <td>Packets Sent</td>
+          <td>{{packetsSent}}</td>
+        </tr>
+        <tr>
+          <td>Packets Received</td>
+          <td>{{packetsReceived}}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+</template>
+
+<template name="wifiChannel">
+    <h5>
+      <strong>Channel Utilization</strong>
+      {{#if channelAbnormal}}
+        <i class="fa fa-fw fa-lg fa-exclamation-triangle" style="color:red"></i>
+      {{/if}}
+    </h5>
+    <div>
+      <!--div id="donut-graph-{{type}}" class="chart no-padding center-donut"></div-->
+      <canvas id="chart-area-{{type}}" width="200" height="200">
+      </canvas>
+      <div id="chart-legend-{{type}}">
+      </div>
+    </div>
+</template>
+
+<template name="wifiReducedCapacity">
+  <div class="panel-group" id="accordionReducedCapacity" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <!--div class="panel-heading" role="tab" id="headingFour">
+        <h4 class="panel-title">
+          <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            <strong>
+               <i class="fa fa-fw fa-lg fa-exclamation-triangle"></i> Reduced Capacity
+            </strong>
+          </button>
+        </h4>
+      </div-->
+      <div class="panel-heading row" style="margin-left:0;margin-right:0" role="tab" id="headingFour">
+        <div class="panel-title col-md-8">
+          <span>Low Downstream PHY Rate</span>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-orange pull-right" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            Analyze
+            </button>
+        </div>
+      </div>
+      <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+        <div class="panel-body">
+          <ul>
+            <li>Poor downstream signal strength and/or interference is resulting in poor PHY rate. If this low PHY rate persists over multiple refreshes in a 5 min window, then move the client device to obtain better PHY rate</li>
+          </ul>
+        </div>
+      </div>
+    </div>  
+  </div>
+</template>
+
+<template name="wifiWeakSignalWithReducedCapacity">
+  <div class="panel-group" id="accordionWeakSignalWithCapacity" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <!--div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <strong>
+               <i class="fa fa-fw fa-lg fa-exclamation-triangle"></i> Weak Signal Strength {{#if reducedCapacity}}with Reduced Capacity {{/if}}
+            </strong>
+          </button>
+        </h4>
+      </div-->
+      <div class="panel-heading row" style="margin-left:0;margin-right:0" role="tab" id="headingOne">
+        <div class="panel-title col-md-8">
+          <span>Weak Signal Strength with Low Downstream PHY Rate</span>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-orange pull-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            Analyze
+            </button>
+        </div>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <ul>
+            <li>Move the client device to obtain better signal strength</li>
+            <li>Move GigaCenter location if moving the client device doesn't help (requires technician)</li>
+          </ul>
+        </div>
+      </div>
+    </div>  
+  </div>
+</template>
+
+<template name="wifiHighInterference">
+  <div class="panel-group" id="accordionHighInterference" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <!--div class="panel-heading" role="tab" id="headingTwo">
+        <h4 class="panel-title">
+          <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <strong>
+              <i class="fa fa-fw fa-lg fa-exclamation-triangle"></i> High Radio Interference
+            </strong>
+          </button>
+        </h4>
+      </div-->
+
+      <div class="panel-heading row" style="margin-left:0;margin-right:0" role="tab" id="headingTwo">
+        <div class="panel-title col-md-8">
+          <span>High Radio Interference</span>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-orange pull-right" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Analyze
+            </button>
+        </div>
+      </div>
+
+      <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body">
+          {{#with getRadioObj}}
+            <ul>
+              {{#if autoModeDisable}}
+                <li>Manually switch channels or set Channel Mode to Auto and see if performance improves</li>
+              {{else}}
+                {{#if dfsModeDisable}}
+                  <li>Turn on DFS channel(while not all clients can use DFS channels, DFS channels typically have lowest interference of all Wi-Fi Channels)</li>
+                {{else}}
+                  {{#if isRadioFive}}
+                  <li>You have an unusually high amount of interference in your environment,please contact Calix support</li>
+                  {{else}}
+                  <li>If only one client is impacted move client to a lower interference location</li>
+                  <li>If all clients are impacted, move GigaCenter location (requires technician)</li>
+                  <li>Even small movement of the GigaCenter location has been shown to improve performance in a high interference environment</li>
+                  {{/if}}
+                {{/if}}
+              {{/if}}
+            </ul>
+          {{/with}}
+        </div>
+      </div>
+    </div>  
+  </div>
+</template>
+
+<template name="wifiHighUtilization">
+  <div class="panel-group" id="accordionHighUtilization" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <!--div class="panel-heading" role="tab" id="headingThree">
+        <h4 class="panel-title">
+          <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <strong>
+              <i class="fa fa-fw fa-lg fa-exclamation-triangle"></i> High Utilization with Legacy Mode
+            </strong>
+          </button>
+        </h4>
+      </div-->
+      <div class="panel-heading row" style="margin-left:0;margin-right:0" role="tab" id="headingThree">
+        <div class="panel-title col-md-8">
+          <span>High Utilization</span>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-orange pull-right" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Analyze
+            </button>
+        </div>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+          <ul>
+            {{#if legacyDevice}}
+            <li>Recommend not using legacy client devices for high bandwidth applications</li>
+            <li>Recommend upgrading legacy client devices to {{#if isRadioFive}}802.11ac {{else}} 802.11n {{/if}}</li>
+            {{else}}
+            <li>You have an unusually high utilization in your environment,please contact Calix support</li>
+            {{/if}}
+          </ul>
+        </div>
+      </div>
+    </div>  
+  </div>
+</template>
+
+<template name="wifiNoRecommendation">
+  <span>
+    No current issues
+  </span>
+</template>
+
+<template name="wifiRecommend">
+
+    <h5>
+      <strong><i class="fa fa-fw fa-lg fa-exclamation-triangle"></i>Observations and Recommendations</strong>
+    </h5>
+    <hr style="margin: 10px 0;">
+    <div>
+      {{> DynamicTemplate template=getTemplate}}
+    </div>
+
+</template>
+
+<template name="wifiDevices">
+    <h5>
+      <strong>Devices</strong>
+    </h5>
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="one-icon">DeviceType</th>
+            <th>Hostname</th>
+            <th>IP Address</th>
+            <th>Mode</th>
+            <th>SSID</th>
+            <th title="the actual data rate will be from 40% to 70% of the PHY rate">DS PHY Rate(Mbps)</th>
+            <th title="the actual data rate will be from 40% to 70% of the PHY rate">US PHY Rate(Mbps)</th>
+            <th>Signal</th>
+            <!--th class="one-icon"></th-->
+          </tr>
+        </thead>
+        <tbody>
+          {{#each devices}}
+            <tr>
+              <td>
+                <!--i class="fa fa-fw fa-lg"></i-->{{deviceType}}</td>
+              <td>{{HostNameOrIpAddress}}</td>
+              <td>{{IPAddress}}</td>
+              <!--td>{{wirelessMode}}</td-->
+              <td>{{wirelessMode}}</td>
+              <td>{{SSID}}</td>
+              <td>{{LastDataDownlinkRate}}
+                {{#if downRateLow}}
+                  <i class="fa fa-fw fa-lg fa-exclamation-triangle" style="color:red"></i>
+                {{/if}}
+              </td>
+              <td>{{LastDataUplinkRate}}</td>
+              <td>
+                {{#if signalWeakShow}}
+                  <div style="width: 50px;">
+                    <div class="wifi-icon wifi-one" style="float: left;" data-toggle="tooltip" data-placement="right" title="{{SignalStrength}}dBm"></div>
+                    <i class="fa fa-fw fa-lg fa-exclamation-triangle" style="float:right;margin-top:4px;color:red"></i>
+                  </div>
+                {{else}}
+                   <!--
+                   {{#if signalWeak}}
+                   {{else}}
+                     <div class="wifi-icon {{signalIcon}}" data-toggle="tooltip" data-placement="right" title="{{SignalStrength}}dBm"></div> 
+                   {{/if}}
+                  -->
+                  <div class="wifi-icon {{signalIcon}}" data-toggle="tooltip" data-placement="right" title="{{SignalStrength}}dBm"></div> 
+                {{/if}}
+              </td>
+              <!--td><i class="fa fa-fw fa-lg fa-link fa-rotate-90" data-toggle="tooltip" data-placement="right" title="Connect"></i></td-->
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="alert alert-info margin-top-20" role="alert">
+        <strong>Notes:</strong>
+        The PHY rate is always higher than the actual data rate due to Ethernet,IP and Wi-Fi protocol overhead   
+    </div>
+</template>
+
+<template name="wifiDetail">
+  <div class="tab-pane active" id="{{type}}">
+    <div class="row margin-top-20">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        {{> wifiRecommend}}
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        {{> wifiRadio}}
+      </div>
+    </div>
+    <div class="row margin-top-20">
+      <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+        {{> wifiChannel}}
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+        {{> wifiDevices}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="wifidiag">
+  <!-- widget grid -->
+  <section id="widget-grid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+        <div class="cc-header">
+          <h1 class="page-title no-margin">
+            <span class="connect-icon"></span>
+            Troubleshooting
+            <span>> Wireless</span>
+            <!--a id="refresh-data" class="pull-right btn btn-default txt-color-white" href="javascript:void(0);" title="Refresh Data" style="padding: 2px 8px; background-color: #5c5d61; border-width: 0px;">
+              <i class="fa fa-refresh" style="font-size: 1.5em;"></i>
+            </a-->
+          </h1>
+        </div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-pills" role="tablist">
+          <li class="{{isActive "two"}}"><a href="#two" role="tab" data-toggle="pill">2.4 GHz Radio</a>
+          </li>
+          <li class="{{isActive "five"}}"><a href="#five" role="tab" data-toggle="pill">5.0 GHz Radio</a>
+          </li>
+        </ul>
+
+        {{#if loading}}
+          <div>
+            <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>
+          </div>
+        {{else}}
+          {{#if error}}
+            <div class="alert alert-danger fade in margin-top-20">
+              <button class="close" data-dismiss="alert">x</button>
+              <i class="fa-fw fa fa-times"></i>
+              <strong>
+                Error!
+              </strong>
+              {{error}}
+            </div>
+          {{else}}
+            <div id="wifiDetailContent" class="tab-content">
+              <!-- Tab panes -->
+              {{#if isActive "two"}}
+                {{> wifiDetail type="two"}}
+              {{else}}  
+                {{> wifiDetail type="five"}}
+              {{/if}}        
+            </div>
+          {{/if}}
+        {{/if}}
+
+      </div>
+    </div>
+  </section>
+  <!-- end widget grid -->
+</template>

@@ -1,0 +1,122 @@
+<template name="br">
+  <section id="widget-grid" class="">
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-pills" role="tablist">
+          <li class={{isActive 'backup'}}><a href="#backup" role="tab" data-toggle="pill">Backup</a>
+          </li>
+          <li class={{isActive 'restore'}}><a href="#restore" role="tab" data-toggle="pill">Restore</a>
+          </li>
+        </ul>
+
+        <div class="tab-content margin-top-20">
+        
+          {{> backup}}
+          {{> restore}}
+      </div>
+
+      </div>
+    </div>
+
+  </section>
+</template>
+
+<template name="backup">
+  <div id="backup" class="tab-pane margin-top-20 {{isActive 'backup'}}">
+            
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="inputDescription" class="col-sm-3" style="align:left">Description&nbsp;&nbsp;(optional)</label>
+
+                    <div class="col-sm-9">
+                      <input type="description" class="form-control" id="inputDescription" placeholder="Description">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <button type="backup" class="btn btn-default btn-orange" disabled= {{backupLoading}}>Start Backup</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="margin-top-20">
+                  <strong>Status&nbsp;&nbsp;
+                    {{#if backupLoading}}
+                      <i class="fa fa-cog fa-spin"></i>
+                    {{/if}}
+                  </strong>
+                  <div class="console-box" id="backup-status">
+                     
+                      {{#each backupResults}}
+                        <span class='timestamp'>{{time}}</span>&nbsp;{{description}}<br>
+                      {{/each}}
+                  </div>
+                </div>
+             
+    </div>
+</template>
+
+
+<template name="restore">
+  <div id="restore" class="tab-pane margin-top-20 {{isActive 'restore'}}">
+            
+            <p>
+              <strong>
+                Restore operation will automatically reboot the Service Gateway with a new configuration specified . It will take approximately 2 min for the device to reboot and services to be restored.
+              </strong>
+            </p>
+                  
+                  <div id="configFilesContainer" class="table-responsive hidden">
+                    {{> configFiles}}
+                  </div>
+                  <div class="margin-top-20">
+                    <button type="restore" class="btn btn-default btn-orange" disabled= {{restoreDisabled}}>Start Restore</button>
+                  </div>
+                  
+                  <div class="margin-top-20">
+                    <strong>Status&nbsp;&nbsp;
+                      {{#if restoreLoading}}
+                        <i class="fa fa-cog fa-spin"></i>
+                      {{/if}}
+                    </strong>
+                    <div class="console-box" id="restore-status">
+                      {{#each restoreResults}}
+                        <span class='timestamp'>{{time}}</span>&nbsp;{{description}}<br>
+                      {{/each}}
+                    </div>
+                  </div>
+                  
+               
+          
+      </div>
+</template>
+
+<template name="configFiles">
+    
+      <table id="configFiles" class="table table-hover">
+        <thead>
+            <tr>
+              <th class="one-icon"></th>
+              <th>Time</th>
+              <th>User</th>
+              <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+          
+          {{#each files}}
+            <tr>
+              <td>
+                <input type="radio" name="radio-inline" id="{{_id}}" checked={{isSelected _id}}>
+              </td>
+              <td>{{getTime}}</td>
+              <td>{{csrUsername}}</td>
+              <td>{{description}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    
+</template>

@@ -1,0 +1,418 @@
+/*var wifiDiagController = gigCenterRouteController.extend({
+  template: "wifidiag",
+  yieldTemplates: {
+    'ccNavigation': {
+      to: 'content-navigation'
+    }
+  },
+  breadCrumbsToReflectNavTreeSelection: function() {
+    return [
+      sxa.breadCrumbs.getBreadCrumbFor('Troubleshooting', null, sxa.systemUtil.appType.CC),
+      sxa.breadCrumbs.getBreadCrumbFor('Wireless', Router.current().url, sxa.systemUtil.appType.CC)
+    ]
+  }
+});*/
+
+Router.map(function() {
+  this.route('troubleshooting-wifi-diag', {
+    path: '/cpe/troubleshooting-wifi-diag',
+    template: "wifidiag"
+  });
+});
+
+Template.wifidiag.created = function() {
+  var orgId = Utils.getOrgId(),
+    serialNumber = Utils.getSerialNumber();
+
+  Session.set('wifidiag.loading', true);
+  Session.set('wifidiag.current', 'two')
+  Meteor.call('getWifiSsids', orgId, serialNumber, fake,function(error, result) {
+    if (error) {
+      Session.set('wifidiag.error', error.reason);
+      Session.set('wifidiag.loading', false);
+    } else {
+      if(fake){
+        result = wlans;
+      }
+      Session.set('wifidiag.data', result);
+      Session.set('wifidiag.loading', false);
+      Meteor.call('getAllLanHosts', orgId, serialNumber, fake,function(error, result) {
+        if(fake){
+          result = lanHosts;
+        }
+        Session.set('wifidiag.hosts', result);
+      });
+    }
+  });
+};
+
+Template.wifiChannel.rendered = function() {
+  Deps.autorun(function() {
+    var radio = getRadioObj();
+    if (radio) {
+      var utilization = parseInt(radio.ChannelUtilization);
+      var interference = parseInt(radio.ChannelInterferenceTime);
+      var free = 100 - utilization - interference;
+      var type = Session.get('wifidiag.current');
+
+      if ($('#donut-graph-' + type).length) {
+        Morris.Donut({
+          element: 'donut-graph-' + type,
+
+          data: [{
+            value: free,
+            label: 'Free Time'
+          }, {
+            value: utilization,
+            label: 'Utilization'
+          }, {
+            value: interference,
+            label: 'Interference'
+          }],
+
+          formatter: function(x) {
+            return x + "%"
+          },
+
+          colors: (function() {
+            //return ["#8170C2", "#6754B6", "#55439D", "#44367D", "#362B64", "#271F47", "#17122B"];  // PURPLE SHADES/TINTS
+            //return ["#663600", "#8F4C00", "#B86200", "#E87B00", "#FF8D0A", "#FFA033", "#FFB35C"];  // ORANGE SHADES/TINTS
+            //return ["#0B64AD", "#0D7AD3", "#198FF0", "#3B9FF3", "#66B5F5", "#8CC7F8", "#B2DAFA"];  // BLUE SHADES/TINTS
+            //return ["#176437", "#1E8549", "#26A65B", "#2ecc71", "#48D583", "#69DD9A", "#8BE5B0"];  // GREEN SHADES/TINTS
+            //return ["#8F0000", "#B80000", "#E00000", "#FF0000", "#FF3333", "#FF5C5C", "#FF8585"];  // RED SHADES/TINTS
+            //return ["#876E08", "#AE8D0A", "#D4AC0C", "#f1c40f", "#F4CF3E", "#F6D965", "#F8E28B"];  // YELLOW SHADES/TINTS
+            if (interference > 20) {
+              return ["#B2DAFA", "#3B9FF3", "red"];
+            }
+            if(utilization > 50){
+              return ["#B2DAFA", "red", "#0B64AD"];
+            }
+            return ["#B2DAFA", "#3B9FF3", "#0B64AD"];
+          }())
+        });
+      }
+    }
+  });
+};
+
+Template.wifidiag.rendered = function() {
+  SmartAdmin.pageSetup();
+};
+
+Template.wifidiag.destroyed = function() {
+  Session.set('wifidiag.loading');
+  Session.set('wifidiag.error');
+  Session.set('wifidiag.data');
+  Session.set('wifidiag.hosts');
+};
+
+var isActive = function(type) {
+    return Session.get('wifidiag.current') === type ? 'active' : '';
+};
+
+Template.wifidiag.helpers({
+  loading: function() {
+    return Session.get("wifidiag.loading");
+  },
+
+  error: function() {
+    return Session.get("wifidiag.error");
+  },
+
+  isActive: isActive
+});
+
+Template.wifidiag.events({
+  'click a[href="#five"]': function(event) {
+    Session.set('wifidiag.current', 'five')
+  },
+
+  'click a[href="#two"]': function(event) {
+    Session.set('wifidiag.current', 'two')
+  }
+});
+
+Template.wifiDetail.helpers({
+  isActive: isActive,
+  radio50: function() {
+    return Session.get('wifidiag.current') === 'five';
+  }
+});
+
+var bandwidthList = {
+  "a": "802.11a",
+  "n": "802.11n",
+  "b": "802.11b",
+  "bgn": "802.11b/g/n",
+  "gn": "802.11g/n",
+  "bg": "802.11b/g",
+  "ac": "802.11ac"
+};
+
+var getInitBandwidthValues = function() {
+  var standard = this['Standard'];
+  return bandwidthList[standard];
+};
+
+var getInitBandwidthValuesForDevice = function() {
+  var standard = this['DeviceStandard'];
+  return bandwidthList[standard];
+};
+
+var vendorParamsMapping = {
+  "ChannelUtilization": "X_000631_ChannelUtilization",
+  "ChannelInterferenceTime": "X_000631_ChannelInterferenceTime",
+  "OperatingChannelBandwidth": "X_000631_OperatingChannelBandwidth",
+  "SignalStrength": "X_000631_SignalStrength",
+  "LastDataDownlinkRate": "X_000631_LastDataDownlinkRate",
+  "LastDataUplinkRate": "X_000631_LastDataUplinkRate",
+  "DeviceStandard": "X_000631_Mode",
+  "DfsEnabled": "X_000631_EnableDfsChannels"
+};
+
+var getRadioObj = function() {
+  var current = Session.get('wifidiag.current');
+  var data = Session.get('wifidiag.data');
+  var radio_obj;
+  if (current === 'two') {
+    radio_obj = Utils.getValueByPath(data, 'InternetGatewayDevice.LANDevice.1.WLANConfiguration.1');
+  } else {
+    radio_obj = Utils.getValueByPath(data, 'InternetGatewayDevice.LANDevice.1.WLANConfiguration.9');
+  }
+  if (radio_obj && _.has(radio_obj, vendorParamsMapping.ChannelUtilization)) {
+    radio_obj.ChannelUtilization = radio_obj[vendorParamsMapping.ChannelUtilization];
+  }
+  if (radio_obj && _.has(radio_obj, vendorParamsMapping.ChannelInterferenceTime)) {
+    radio_obj.ChannelInterferenceTime = radio_obj[vendorParamsMapping.ChannelInterferenceTime];
+  }
+  if (radio_obj && _.has(radio_obj, vendorParamsMapping.OperatingChannelBandwidth)) {
+    radio_obj.OperatingChannelBandwidth = radio_obj[vendorParamsMapping.OperatingChannelBandwidth];
+  }
+
+  return radio_obj;
+};
+
+var getSsids = function() {
+  var current = Session.get('wifidiag.current');
+  var data = Session.get('wifidiag.data');
+  var ssid, ssids = [];
+  var add2SsidArray = function(start) {
+    for (var i = start; i < start + 8; i++) {
+      ssid = Utils.getValueByPath(data, 'InternetGatewayDevice.LANDevice.1.WLANConfiguration.' + i);
+      if (ssid) {
+        ssids.push(ssid);
+      }
+    }
+  };
+
+  if (current === 'two') {
+    add2SsidArray(1);
+  } else {
+    add2SsidArray(9);
+  }
+
+  return ssids;
+};
+
+var findMatchedDevice = function(device) {
+  var lanDevices = Session.get('wifidiag.hosts');
+  var matchedDevice;
+  _.each(lanDevices, function(lanDevice) {
+    if (lanDevice.MACAddress === device.AssociatedDeviceMACAddress) {
+      matchedDevice = lanDevice;
+    }
+  });
+  return matchedDevice;
+};
+
+var getDevices = function() {
+  var ssids = getSsids(),
+    devices = [],
+    matchedDevice;
+
+  _.each(ssids, function(ssid) {
+    if (ssid.AssociatedDevice) {
+      _.each(ssid.AssociatedDevice, function(device) {
+        matchedDevice = findMatchedDevice(device);
+        device = _.extend(device, matchedDevice);
+        device.SSID = ssid.SSID;
+        device.SignalStrength = device[vendorParamsMapping.SignalStrength];
+        device.LastDataDownlinkRate = device[vendorParamsMapping.LastDataDownlinkRate];
+        device.LastDataUplinkRate = device[vendorParamsMapping.LastDataUplinkRate];
+        device.DeviceStandard = device[vendorParamsMapping.DeviceStandard];
+        devices.push(device);
+      })
+    }
+  });
+
+  return devices;
+};
+
+var nameMap = {
+  0: 'Camera',
+  1: 'Cell Phone',
+  2: 'Computer',
+  3: 'Gamming Console',
+  4: 'iPhone',
+  5: 'IPTV STB',
+  6: 'Phone',
+  7: 'Printer',
+  8: 'PS-3',
+  9: 'Router',
+  10: 'Satellite Receiver',
+  11: 'Server',
+  12: 'Video Camera',
+  13: 'Wii',
+  14: 'X-Box 360',
+  15: 'Tablet',
+  16: 'Smart TV'
+};
+
+var signalWeak = function() {
+  var signalStrength = parseInt(this['SignalStrength']);
+  if (signalStrength < (WifiThresholds.SignalOne)) {
+    return true;
+  }
+  return false;
+};
+
+var downRateLow = function() {
+  var downRate = this['LastDataDownlinkRate'];
+  var standard = this['DeviceStandard'];
+  if (standard === 'a' || standard === 'b') {
+    return downRate < WifiThresholds.DownRateLegacy;
+  } else {
+    return downRate < WifiThresholds.DownRateNormal;
+  }
+};
+
+Template.wifiDevices.helpers({
+  devices: function() {
+    var devices = getDevices();
+    return devices;
+  },
+
+  deviceType: function() {
+    return nameMap[parseInt(this['Icon'])];
+  },
+
+  wirelessMode: function() {
+    return getInitBandwidthValuesForDevice.call(this);
+  },
+
+  signalIcon: function() {
+    var signalStrength = parseInt(this['SignalStrength']);
+    if (signalWeak.call(this)) {
+      return 'wifi-one';
+    } else if (signalStrength >= (WifiThresholds.SignalOne) && signalStrength < (WifiThresholds.SignalTwo)) {
+      return 'wifi-two';
+    } else if (signalStrength >= (WifiThresholds.SignalTwo) && signalStrength < (WifiThresholds.SignalThree)) {
+      return 'wifi-three';
+    } else {
+      return 'wifi-four';
+    }
+  },
+
+  downRateLow: downRateLow,
+
+  signalWeak: signalWeak
+});
+
+Template.wifiRecommend.helpers({
+
+  getTemplate: function() {
+    // 1. weak signal check
+    var devices = getDevices();
+    var deviceSignalWeak = function(d) {
+      if (signalWeak.call(d) && downRateLow.call(d)) {
+        return true;
+      }
+      return false;
+    };
+    if (_.some(devices, deviceSignalWeak)) {
+      return 'wifiWeakSignal';
+    }
+
+    // 2. high interference check
+    var radio = getRadioObj();
+    var utilization = parseInt(radio.ChannelUtilization);
+    var interference = parseInt(radio.ChannelInterferenceTime);
+    var free = 100 - utilization - interference;
+    if (interference > WifiThresholds.InterferenceMaxRate) {
+      return 'wifiHighInterference';
+    }
+
+    // 3. high utilization check
+    if (free < WifiThresholds.FreeMinRate) {
+      return 'wifiHighUtilization';
+    }
+    return 'wifiNoRecommendation';
+  }
+});
+
+Template.wifiHighInterference.helpers({
+  getRadioObj: getRadioObj,
+
+  autoModeDisable: function() {
+    return this.AutoChannelEnable !== 'true';
+  },
+
+  dfsModeDisable: function() {
+    return this[vendorParamsMapping.DfsEnabled] !== 'true';
+  }
+});
+
+Template.wifiRadio.helpers({
+
+  radioEnable: function() {
+    var radio = getRadioObj();
+    if (radio.RadioEnabled === 'true') {
+      return 'Enabled'
+    }
+    return 'Disabled';
+  },
+
+  wirelessMode: function() {
+    var radio = getRadioObj();
+    return getInitBandwidthValues.call(radio);
+  },
+
+  channelModel: function() {
+    var radio = getRadioObj();
+    var channel = radio.Channel;
+    if (radio.AutoChannelEnable === 'true') {
+      return 'Auto (' + channel + ')';
+    } else {
+      return 'Manual (' + channel + ')';
+    }
+  },
+
+  operatingChannel: function() {
+    var radio = getRadioObj();
+    return radio.Channel;
+  },
+
+  channelBandwidth: function() {
+    var radio = getRadioObj();
+    return radio.OperatingChannelBandwidth;
+  },
+
+  packetsSent: function() {
+    var ssids = getSsids();
+    var sent = 0;
+    _.each(ssids, function(ssid) {
+      sent += parseInt(ssid.TotalPacketsSent);
+    })
+    return sent;
+  },
+
+  packetsReceived: function() {
+    var ssids = getSsids();
+    var received = 0;
+    _.each(ssids, function(ssid) {
+      received += parseInt(ssid.TotalPacketsReceived);
+    })
+    return received;
+  }
+
+});

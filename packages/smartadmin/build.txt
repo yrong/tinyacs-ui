@@ -1,0 +1,16 @@
+
+1. Code changes based on original
+
+variables.less  -  Change icon-font-path to '/packages/smartadmin/fonts/'
+variables.less  -  Change base-url to '/packages/smartadmin/img'
+smartadmin-production.less  -  import "3.2/mixins.less"
+
+2. Build CSS files from LESS,
+
+lessc less/smartadmin-production.less css/smartadmin-production.css
+lessc less/smartadmin-skin/smartadmin-skins.less css/smartadmin-skins.css
+lessc less/bootstrap.less bootstrap3/bootstrap.css
+
+3. Grep base-url and related assets in package.js
+
+4. Modify package.js include all assets

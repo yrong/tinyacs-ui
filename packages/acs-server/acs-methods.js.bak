@@ -1,0 +1,20 @@
+Meteor.methods({
+  'loadCpe': function(orgId, sn) {
+    var wanPath, data = {};
+
+    if (sn == null || !_.isString(sn) || sn.trim().length == 0) {
+      throw new Meteor.Error(400, 'Missing CPE Serial Number');
+    }
+
+    wanPath = AcsNbi.Utils.getWanConnectionPath(orgId, {
+      'serialNumber': sn
+    });
+
+    if (wanPath) data.wanPath = wanPath;
+    return data;
+  },
+
+  'unloadCpe': function(sn) {
+    // TODO Tell ACS Server not interested in CPE <sn>
+  }
+});

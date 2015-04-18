@@ -1,0 +1,9 @@
+{
+  "name": "google-opensans-less",
+  "description": "Google Font Open Sans with LESS for easy CSS customization",
+  "homepage": "https://github.com/meggar/google-opensans-less",
+  "author": "Richard Meng <mengangr@gmail.com>",
+  "version": "0.1.0",
+  "git": "https://github.com/meggar/google-opensans-less",
+  "packages": {}
+}

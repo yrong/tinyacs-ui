@@ -1,0 +1,81 @@
+<template name="workflowSummary">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+      <div style="margin-bottom: 25px">
+        <h1 class="page-title no-margin">
+          <div class="connect-icon"></div>
+          Network Operations
+          <span>&gt;&nbsp;{{i18n "workflows"}}</span>
+        </h1>
+      </div>
+      <h1>{{i18n "workflows"}}</h1>
+      <div class="margin-top-20">
+        {{#if ready}}
+          {{#if error}}
+            <div class="alert alert-danger fade in">
+              <button class="close" data-dismiss="alert">×</button>
+              <i class="fa-fw fa fa-times"></i>
+              <strong>
+                Error!
+              </strong>
+              {{error}}
+            </div>
+          {{/if}}
+          {{> workflowTable}}
+          <div class="pull-right">
+            <button id="btn-newWorkflow" class="btn btn-orange">New Workflow</button>
+          </div>
+        {{else}}
+          <div>
+            <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="workflowTable">
+
+  <div id="confirmDialog" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+    <button class="btn-warning pull-right cancel" style="margin-top:-2px;margin-left:6px;">Cancel</button>
+    <button class="btn-warning pull-right confirm" style="margin-top:-2px;">Confirm</button>
+    <strong>Warning!</strong>
+    <span style="margin-left:10px;"></span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Current State</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th style="width:92px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each workflow}}
+          <tr class="workflow-entry" id="{{_id}}" style="cursor:pointer;">
+            <td>{{name}}</td>
+            <td>{{description}}</td>
+            <td>{{state}}</td>
+            <td>{{time start}}</td>
+            <td>{{time end}}</td>
+            <td>
+              <i class="fa fa-lg fa-fw fa-eye" data-toggle="tooltip" data-placement="right" title="Status"></i>
+              {{#if isSuspendedState}}
+                <i class="fa fa-lg fa-fw fa-check-circle-o" data-toggle="tooltip" data-placement="right" title="Resume"></i>
+              {{else}}
+                <i class="fa fa-lg fa-fw fa-ban" data-toggle="tooltip" data-placement="right" title="Suspend"></i>
+              {{/if}}
+              <i class="fa fa-lg fa-fw fa-trash-o" data-toggle="tooltip" data-placement="right" title="Delete"></i>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>

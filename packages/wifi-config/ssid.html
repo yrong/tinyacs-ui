@@ -1,0 +1,183 @@
+<template name="ssid">
+  {{#if ready}}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        {{#with selectedInstance}}
+          {{> selectedSSIDForm}}
+          <div class="row margin-top-20">
+            <div class="col-sm-offset-2 col-sm-10">
+              {{#if loading}}
+                <div>
+                  <h1 class="col-sm-offset-2 col-sm-10 ajax-loading-animation"><i class="fa fa-cog fa-spin"></i>{{i18n 'loadingPleaseWait'}}</h1>
+                </div>
+              {{else}}
+                <div class="pull-right">
+                  <button type="submit" id='ssidSubmit' class="btn btn-orange" disabled="disabled">{{i18n 'submit'}}</button>
+                  <button type="cancel" id='ssidCancel' class="btn btn-orange">{{i18n 'cancel'}}</button>
+                </div>
+              {{/if}}
+              {{#if error}}
+                <div class="alert alert-danger fade in margin-top-20">
+                  <button class="close" data-dismiss="alert">×</button>
+                  <i class="fa-fw fa fa-times"></i>
+                  <strong>{{i18n 'error'}}&nbsp;</strong>{{error}}
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        {{/with}}
+
+        {{#unless selectedInstance}}
+          {{#if error}}
+            <div class="alert alert-danger fade in margin-top-20">
+              <button class="close" data-dismiss="alert">×</button>
+              <i class="fa-fw fa fa-times"></i>
+              <strong>{{i18n 'error'}}&nbsp;</strong>{{error}}
+            </div>
+          {{/if}}
+        {{/unless}}
+        {{#with getSsid}}
+          <h5 class="margin-top-20">
+            <strong>SSIDs</strong>
+          </h5>
+          <div class="table-responsive" style="margin-top:10px;">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>{{i18n 'name'}}</th>
+                  <th>{{i18n 'service'}}</th>
+                  <th>{{i18n 'broadcasting'}}</th>
+                  <th>{{i18n 'security'}}</th>
+                  <th>{{i18n 'encryption'}}</th>
+                  <th>{{i18n 'frequencyBand'}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each wlans}}
+                  <tr class="wlan" style="{{rowStyle}}">
+                    <td>{{SSID}}</td>
+                    <td>{{status "Enable"}}</td>
+                    <td>{{status "SSIDAdvertisementEnabled"}}</td>
+                    <td>{{beaconType}}</td>
+                    <td>
+                      {{#unless securityOffState}}
+                        {{encryption}}
+                      {{/unless}}
+                    </td>
+                    <td>{{frequencyBand}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{/with}}
+      </div>
+    </div>
+  {{else}}
+    <div>
+      <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i>{{i18n 'loadingPleaseWait'}}</h1>
+    </div>
+  {{/if}}
+
+</template>
+
+
+<template name="selectedSSIDForm">
+  <form id="selectedSSID" class="smart-form margin-top-20" role="form">
+    <section>
+      <div class="row">
+        <label for="frequencyBand" class="col col-2 control-label">{{i18n 'frequencyBand'}}</label>
+
+        <div class="col col-10">
+          <label class="input state-disabled">
+            <input id="frequencyBand" type="text" class="form-control" disabled value="{{frequencyBand}}">
+          </label>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="row">
+        <label for="ssid_name" class="col col-2 control-label">{{i18n 'name'}}</label>
+        <div class="col col-10">
+          <label class="input">
+            <input type="text" class="form-control" id="ssid_name" placeholder="Name" value="{{SSID}}" name="ssidname">
+          </label>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="row">
+        <label class="col col-2 control-label">{{i18n 'service'}}</label>
+
+        <div class="col col-10">
+          <label class="toggle pull-left">
+            <input id="serviceEnabled" type="checkbox" name="checkbox-toggle" checked="{{isChecked "Enable"}}">
+            <i style="right:8px;" data-swchon-text="ON" data-swchoff-text="OFF"></i>
+          </label>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="row">
+        <label class="col col-2 control-label">{{i18n 'broadcasting'}}</label>
+
+        <div class="col col-10">
+          <label class="toggle pull-left">
+            <input id="broadcastEnabled" type="checkbox" name="checkbox-toggle" checked="{{isChecked "SSIDAdvertisementEnabled"}}">
+            <i style="right:8px;" data-swchon-text="ON" data-swchoff-text="OFF"></i>
+          </label>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="row">
+        <label for="beaconType" class="col col-2 control-label">{{i18n 'security'}}</label>
+
+        <div class="col col-10">
+          <select id="beaconType" class="form-control" placeholder="Security">
+            {{#each beaconTypes "WPA WPA2 Personal,WPA2-Personal,Security Off"}}
+              <option selected= {{selected}}>{{value}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </section>
+    {{#if securityOn}}
+      <section>
+        <div class="row">
+          <label for="encryption" class="col col-2 control-label">{{i18n 'encryption'}}</label>
+
+          <div class="col col-10">
+            <select id="encryption" class="form-control" placeholder="Encryption">
+              <option selected="{{isSame 'IEEE11iEncryptionModes' 'AESEncryption'}}">AES</option>
+              <option selected="{{isSame 'IEEE11iEncryptionModes' 'TKIPEncryption'}}">TKIP</option>
+              <option selected="{{isSame 'IEEE11iEncryptionModes' 'TKIPandAESEncryption'}}">{{i18n 'both'}}</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="row">
+          <label for="passphrase" class="col col-2 control-label">{{i18n 'keyPassphrase'}}</label>
+
+          <div class="col col-10">
+            <label class="input">
+              <input id="passphrase" name="passphrase" type="text" class="form-control" placeholder="{{placeholderText}}" {{passphraseAttribute}}>
+            </label>
+          </div>
+        </div>
+      </section>
+        <section>
+            <div class="row">
+                <label for="passphraseToggle" class="col col-2 control-label">{{i18n 'showPassphrase'}}</label>
+                <div class="col col-10">
+                    <label class="toggle pull-left">
+                        <input id="passphraseToggle" type="checkbox" name="checkbox-toggle">
+                        <i style="right:8px;" data-swchon-text="ON" data-swchoff-text="OFF"></i>
+                    </label>
+                </div>
+            </div>
+        </section>
+    {{/if}}
+  </form>
+</template>

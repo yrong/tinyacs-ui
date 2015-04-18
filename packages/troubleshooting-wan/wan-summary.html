@@ -1,0 +1,157 @@
+<template name='wansummary'>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      {{#if interfacesReady}}
+      {{#if summaryReady}}
+        {{#if summaryError}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>
+              Error!
+            </strong>
+            {{summaryError}}
+          </div>
+        {{/if}}
+        {{#with summaryData}}
+        <h5><strong>WAN Status</strong></h5>
+        <table class="table table-hover">
+          <thead>
+            <th style="width: 40%"></th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Enabled</td>
+              <td>{{wanEnabled}}</td>
+            </tr>
+            <tr>
+              <td>Uptime</td>
+              <td>{{wanUptime}}</td>
+            </tr>
+            <tr>
+              <td>Connection Status</td>
+              <td>{{wanParameter "ConnectionStatus"}}</td>
+            </tr>
+            <tr>
+              <td>MAC Address</td>
+              <td>{{wanParameter "MACAddress"}}</td>
+            </tr>
+            <tr>
+              <td>Downstream (Mbps)</td>
+              <td>{{wanDownstreamRate}}</td>
+            </tr>
+            <tr>
+              <td>Upstream (Mbps)</td>
+              <td>{{wanParameter "_UpstreamRate"}}</td>
+            </tr>
+            {{#if hasVlanParam}}
+              {{#if _VlanTagAction}}
+              <tr>
+                <td>VLAN ID</td>
+                <td>{{wanParameter "_VlanId"}}</td>
+              </tr>
+              <tr>
+                <td>VLAN Priority</td>
+                <td>{{wanParameter "_VlanPriority"}}</td>
+              </tr>
+              {{else}}
+              <tr>
+                <td>VLAN</td>
+                <td>{{i18n "untagged"}}</td>
+              </tr>
+              {{/if}}
+            {{/if}}
+          </tbody>
+        </table>
+        <h5 class="margin-top-20"><strong>WAN Configuration</strong></h5>
+        <table class="table table-hover">
+          <thead>
+            <th style="width: 40%"></th>
+            <th></th>
+          </thead>
+          <tbody>
+            {{#if hasParameter "AddressingType"}}
+            <!-- IP/DHCP -->
+            <tr>
+              <td>Addressing Type</td>
+              <td>{{wanParameter "AddressingType"}}</td>
+            </tr>
+            {{/if}}
+            {{#if hasParameter "Username"}}
+            <!-- PPPoE -->
+            <tr>
+              <td>Username</td>
+              <td>{{wanParameter "Username"}}</td>
+            </tr>
+            {{/if}}
+            <tr>
+              <td>Connection Type</td>
+              <td>{{wanParameter "ConnectionType"}}</td>
+            </tr>
+            {{#if hasParameter "DefaultGateway"}}
+            <!-- IP/DHCP -->
+            <tr>
+              <td>Default Gateway</td>
+              <td>{{wanParameter "DefaultGateway"}}</td>
+            </tr>
+            {{/if}}
+            {{#if hasParameter "SubnetMask"}}
+            <!-- IP/DHCP -->
+            <tr>
+              <td>Subnet Mask</td>
+              <td>{{wanParameter "SubnetMask"}}</td>
+            </tr>
+            {{/if}}
+            {{#if hasParameter "RemoteIPAddress"}}
+            <!-- PPPoE -->
+            <tr>
+              <td>Remote IP Address</td>
+              <td>{{wanParameter "RemoteIPAddress"}}</td>
+            </tr>
+            {{/if}}
+            <tr>
+              <td>DNS Servers</td>
+              <td>{{wanParameter "DNSServers"}}</td>
+            </tr>
+            <tr>
+              <td>External IP Address</td>
+              <td>{{wanParameter "ExternalIPAddress"}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <h5 class="margin-top-20"><strong>WAN Statistics</strong></h5>
+        <table class="table table-hover">
+          <thead>
+            <th style="width: 40%"></th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bytes Received</td>
+              <td>{{wanParameter "Stats.EthernetBytesReceived"}}</td>
+            </tr>
+            <tr>
+              <td>Bytes Sent</td>
+              <td>{{wanParameter "Stats.EthernetBytesSent"}}</td>
+            </tr>
+            <tr>
+              <td>Packets Received</td>
+              <td>{{wanParameter "Stats.EthernetPacketsReceived"}}</td>
+            </tr>
+            <tr>
+              <td>Packets Sent</td>
+              <td>{{wanParameter "Stats.EthernetPacketsSent"}}</td>
+            </tr>
+          </tbody>
+        </table>
+        {{/with}}
+      {{else}}
+        <div>
+          <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading Summary...</h1>
+        </div>
+      {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</template>

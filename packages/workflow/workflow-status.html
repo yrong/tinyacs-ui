@@ -1,0 +1,85 @@
+<template name="workflowStatus">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+      <h1 class="pull-left">{{name}}</h1>
+      <h3 class="pull-right workflow-status blue" data-toggle="tooltip" data-placement="top" title={{inProgressDevicesTooltip}}>{{inProgressDevicesPercent}}&nbsp;In Progress
+      </h3>
+      <h3 class="pull-right workflow-status red" data-toggle="tooltip" data-placement="top" title={{devicesTooltip failureCount}}>{{devicesPercent failureCount}}&nbsp;Failed
+      </h3>
+      <h3 class="pull-right workflow-status green" data-toggle="tooltip" data-placement="top" title={{devicesTooltip successCount}}>{{devicesPercent successCount}}&nbsp;Succeed
+      </h3>
+      <h3 class="pull-right">{{devicesPercent completeCount}}&nbsp;Complete</h3>
+      <div style="clear:both"></div>
+      {{#if ready}}
+        {{#if error}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>
+              Error!
+            </strong>
+            {{error}}
+          </div>
+        {{else}}
+          {{> statusTable}}
+        {{/if}}
+      {{else}}
+        <div>
+          <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+<template name="statusTable">
+  <div class="table-responsive margin-top-10">
+    <table id="table-status" class="table table-hover">
+      <thead>
+        <th>Serial Number</th>
+        <th>IP Address</th>
+        <th>Model</th>
+        <th>SW Version</th>
+        <th>Status</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+      </thead>
+      <tbody>
+        {{#each result}}
+          <tr>
+            <td>{{serialNumber}}</td>
+            <td>{{ipAddress}}</td>
+            <td>{{modelName}}</td>
+            <td>{{softwareVersion}}</td>
+            <td>{{state}}</td>
+            <td>{{time start}}</td>
+            <td>{{time end}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class="pull-left">
+    Showing
+    <span>
+      <strong>{{startNumber}}</strong>
+    </span>to
+    <span>
+      <strong>{{endNumber}}</strong>
+    </span>of
+    <span style="color:#3b9ff3">
+      <strong>{{count}}</strong>
+    </span>
+    entries
+  </div>
+  <ul class="pagination pull-right">
+    <li id="pre"><a href="#">&laquo;</a>
+    </li>
+    {{#each pageNumbers}}
+      <li id={{pageNumber}}><a href="#">{{pageNumber}}</a>
+      </li>
+    {{/each}}
+    <li id="post"><a href="#">&raquo;</a>
+    </li>
+  </ul>
+</template>

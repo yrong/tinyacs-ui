@@ -1,0 +1,62 @@
+<template name="troubleshootingRadio">
+  <div class="row" id="{{radioId type}}">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      {{#if radioSummaryReady type}}
+        {{#with radio type}}
+          <h5 class="margin-top-20">
+            <strong>Radio Information</strong>
+          </h5>
+          <table class="table table-responsive">
+            <thead>
+              <th style="width: 40%;"></th>
+              <th></th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Wireless Radio</td>
+                <td>{{status 'RadioEnabled'}}</td>
+              </tr>
+              <tr>
+                <td>Mode</td>
+                <td>{{getMode}}</td>
+              </tr>
+              <tr>
+                <td>Bandwidth</td>
+                <td>{{getBandwidth}}</td>
+              </tr>
+              <tr>
+                <td>Channel</td>
+                <td>{{getChannel}}</td>
+              </tr>
+              <tr>
+                <td>Power Level</td>
+                <td>{{TransmitPower}}%</td>
+              </tr>
+              <tr>
+                <td>Multicast Forwarding</td>
+                <td>{{status 'X_CALIX_MulticastForwardEnable'}}</td>
+              </tr>
+              {{#if isType5 type}}
+                <tr>
+                  <td>DFS</td>
+                  <td>{{status 'X_000631_EnableDfsChannels'}}</td>
+                </tr>
+              {{/if}}
+            </tbody>
+          </table>
+        {{/with}}
+        {{#if radioError type}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close " data-dismiss="alert ">×</button>
+            <i class="fa-fw fa fa-times "></i>
+            <strong>Error!&nbsp;</strong>{{radioError type}}
+          </div>
+        {{/if}}
+      {{else}}
+        <div>
+          <h1 class="ajax-loading-animation margin-top-20"><i class="fa fa-cog fa-spin "></i> Loading...</h1>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</template>

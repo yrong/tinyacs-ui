@@ -1,0 +1,549 @@
+<template name="WorkFlowWizardHeader">
+  <div class="form-bootstrapWizard">
+    <ul class="bootstrapWizard form-wizard">
+      <li class="fivesteps active" data-target="#step1">
+        <a href="#tab1" data-toggle="tab">
+          <span class="step">1</span>
+          <span class="title">Start</span>
+        </a>
+      </li>
+      <li class="fivesteps" data-target="#step2">
+        <a href="#tab2" data-toggle="tab">
+          <span class="step">2</span>
+          <span class="title">Select Device Groups</span>
+        </a>
+      </li>
+      <li class="fivesteps" data-target="#step3">
+        <a href="#tab3" data-toggle="tab">
+          <span class="step">3</span>
+          <span class="title">Select Operation Parameters</span>
+        </a>
+      </li>
+      <li class="fivesteps" data-target="#step4">
+        <a href="#tab4" data-toggle="tab">
+          <span class="step">4</span>
+          <span class="title">Select Schedule Parameters</span>
+        </a>
+      </li>
+      <li class="fivesteps" data-target="#step5">
+        <a href="#tab5" data-toggle="tab">
+          <span class="step">5</span>
+          <span class="title">Review</span>
+        </a>
+      </li>
+    </ul>
+    <div class="clearfix"></div>
+  </div>
+</template>
+
+<template name="WorkFlowBasicInfo">
+  <br>
+  <h3>
+    <strong>Step 1</strong>- Start</h3>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <form class="workflow-basic">
+        <div class="form-group">
+          <label for="inputName" class="col-sm-2">Name</label>
+
+          <div class="col-sm-10">
+            <input type="name" class="form-control" id="inputName" name="inputName" placeholder="Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputDescription" class="col-sm-2">Description
+            <br>(optional)</label>
+
+          <div class="col-sm-10">
+            <input type="name" class="form-control" id="inputDescription" name="inputDescription" placeholder="Description">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</template>
+
+<template name="WorkFlowDeviceGroup">
+  <br>
+  <h3>
+    <strong>Step 2</strong>- Select Device Groups</h3>
+  <div class="row" id="availableGroups">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <h5>
+        <strong>Available Device Groups</strong>
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="one-icon">
+              </th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+              <!--th class="one-icon"></th-->
+            </tr>
+          </thead>
+          <tbody>
+            {{#each groups}}
+              <tr>
+                <td>
+                  <input type="checkbox" name="checkbox-inline" id="{{_id}}">
+                </td>
+                <td>{{name}}</td>
+                <td>{{description}}</td>
+                <td>Dynamic</td>
+                <!--td><i class="fa fa-lg fa-fw fa-info-circle"></i></td-->
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="WorkFlowOperations">
+  <br>
+  <h3>
+    <strong>Step 3</strong>- Select Operation Parameters</h3>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      {{> DynamicTemplate template=getTemplate }}
+    </div>
+  </div>
+</template>
+
+<template name="WorkFlowOperationSummary">
+  <div id="confirmDialog" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+    <button class="btn btn-warning pull-right cancel" style="padding: 4px 10px; margin-top: -5px; margin-left:6px;">Cancel</button>
+    <button class="btn btn-warning pull-right confirm" style="padding: 4px 10px; margin-top: -5px;">Confirm</button>
+    <strong>Warning!</strong>
+    <span style="margin-left:10px;"></span>
+  </div>
+
+
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th style="width:42px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each operations}}
+          <tr>
+            <td>{{actionType}}</td>
+            <td>{{getActionName}}</td>
+            <td style="width:42px;cursor:pointer;">
+              <i class="fa fa-lg fa-fw fa-trash-o" data-toggle="tooltip" data-placement="right" title="" data-original-title="Delete"></i>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull-right">
+    <button id="btn-newOperation" class="btn btn-orange">New Operation</button>
+  </div>
+
+
+</template>
+
+
+<template name="WorkFlowOperationParam">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="form-group">
+        <label for="inputOperationType" class="col-sm-2 control-label">Operation Type</label>
+
+        <div class="col-sm-10">
+          <select class="form-control" id="inputOperationType" placeholder="Operation Type">
+            <option value="WorkFlowConfigFileDownload" selected="selected">{{i18n 'configurationFileDownload'}}</option>
+            <option value="WorkFlowImageFileDownload">{{i18n 'imageFileDownload'}}</option>
+            <option value="WorkFlowProfile">{{i18n 'applyProfile'}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{> DynamicTemplate template=getTemplate }}
+  <div class="row">
+    <div class="col col-12 pull-right">
+      <button id="btn-discardOperation" class="btn btn-orange">{{i18n 'discard'}}</button>
+      <button id="btn-doneOperation" class="btn btn-orange" disabled= {{unAvailable}}>{{i18n 'doneDone'}}</button>
+    </div>
+  </div>
+</template>
+
+
+<template name="WorkFlowConfigFileDownload">
+  <div class="row" id="availableConfigFiles">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <h5>
+        <strong>Available Config Files</strong>
+      </h5>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="one-icon"></th>
+              <th>{{i18n 'name'}}</th>
+              <th>{{i18n 'description'}}</th>
+              <th>{{i18n 'softwareVersion'}}</th>
+              <th>{{i18n 'type'}}</th>
+              <!--th class="one-icon"></th-->
+            </tr>
+          </thead>
+
+          <tbody>
+            {{#each availableConfigFiles}}
+              <tr>
+                <td>
+                  <input type="radio" name="radio-inline" id="{{_id}}">
+                </td>
+                <td>{{name}}</td>
+                <td>{{description}}</td>
+                <td>{{version}}</td>
+                <td>{{type}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<template name="WorkFlowImageFileDownload">
+  <div class="row" id="availableImageFiles">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <h5>
+        <strong>Available Image Files</strong>
+      </h5>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="one-icon"></th>
+              <th>{{i18n 'name'}}</th>
+              <th>{{i18n 'description'}}</th>
+              <!--th class="one-icon"></th-->
+            </tr>
+          </thead>
+
+          <tbody>
+            {{#each availableImageFiles}}
+              <tr>
+                <td>
+                  <input type="radio" name="radio-inline" id="{{_id}}">
+                </td>
+                <td>{{name}}</td>
+                <td>{{description}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="WorkFlowProfile">
+  <div class="row" id="availableProfiles">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <h5>
+        <strong>{{i18n 'availableProfiles'}}</strong>
+      </h5>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="one-icon"></th>
+              <th>{{i18n 'name'}}</th>
+              <th>{{i18n 'description'}}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {{#each availableProfiles}}
+              <tr>
+                <td>
+                  <input type="radio" name="radio-inline" id="{{_id}}">
+                </td>
+                <td>{{name}}</td>
+                <td>{{description}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="WorkFlowWizardAction">
+  <div class="form-actions">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul class="pager wizard no-margin">
+
+          <li class="previous disabled">
+            <a href="javascript:void(0);" class="btn btn-lg btn-default"> Previous </a>
+          </li>
+
+          <li class="next">
+            <a href="javascript:void(0);" class="btn btn-lg txt-color-darken"> Next </a>
+          </li>
+
+          <li class="next finish" style="display:none;">
+            <a href="javascript:void(0);" class="btn btn-lg btn-success txt-color-darken">Finish</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="WorkFlowTrigger">
+  <br>
+  <h3>
+    <strong>Step 4</strong>- Select Policies</h3>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="form-group">
+        <label for="inputTrigger" class="col-sm-2 control-label">Trigger</label>
+
+        <div class="col-sm-10">
+          <select class="form-control" id="inputTriggerType" placeholder="Trigger Type">
+            <option value="WorkFlowEventTrigger" selected="selected">{{i18n 'onDiscovery'}}</option>
+            <option value="WorkFlowSchedulerTrigger">{{i18n 'timeScheduler'}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{> DynamicTemplate template=getTemplate }}
+</template>
+
+<template name="WorkFlowSchedulerTrigger">
+
+  <hr style="border-top-color:#ddd;">
+  <p>
+    <strong>{{i18n 'recurringSchedule'}}</strong>
+  </p>
+
+  <br>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <form class="workflow-policy">
+        
+        <div class="form-group">
+          <label class="col-sm-2" title="TimeZone as Local">Start Time</label>
+          <div class='col-sm-10 input-group date' id="datepicker">
+            <input class="set-due-date form-control" type="text" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="windowlength" class="col-sm-2" title="">Time Window Length(minutes)</label>
+          <div class="col-sm-10 input-group">
+            <input class="set-due-date form-control" type="text" id="windowlength" name="windowlength" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template name="WorkFlowSchedulerTriggerSummary">
+  <form class="workflow-policy-sum">
+    <div class="form-group">
+      <label class="col-sm-2" title="TimeZone as Local">Start Time</label>
+      <div class="col-sm-10 input-group">
+        <input class="set-due-date form-control" type="text" id="datepicker-sum" disabled="disabled" />
+        <span class="input-group-addon"><i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="windowlength-summary" class="col-sm-2" title="">{{i18n 'timeWindow'}}</label>
+      <div class="col-sm-10 input-group ">
+        <input class="set-due-date form-control" type="text" id="windowlength-summary" disabled="disabled" />
+      </div>
+    </div>
+  </form>
+</template>
+
+
+<template name="WorkFlowEventTrigger">
+  <hr style="border-top-color:#ddd;">
+  <p>
+    <strong>{{i18n 'triggerParamMessage'}}</strong>
+  </p>
+</template>
+
+
+<template name="WorkflowWizard">
+  <section>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+
+        <div class="cc-header">
+          <h1 class="page-title txt-color-blueDark no-margin">
+            <div class="connect-icon"></div>
+            {{i18n "workflows"}}
+            <span>&gt;&nbsp;{{i18n 'wizard'}}</span>
+          </h1>
+        </div>
+
+        <div class="row">
+          <form class="form-horizontal" id="wizard-1" novalidate="novalidate">
+            <div id="bootstrap-wizard-1" class="col-sm-12">
+
+              {{> WorkFlowWizardHeader}}
+
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                  {{> WorkFlowBasicInfo}}
+                </div>
+
+                <div class="tab-pane" id="tab2">
+                  {{> WorkFlowDeviceGroup}}
+                </div>
+
+                <div class="tab-pane" id="tab3">
+                  {{> WorkFlowOperations}}
+                </div>
+
+                <div class="tab-pane" id="tab4">
+                  {{> WorkFlowTrigger}}
+                </div>
+
+                <div class="tab-pane" id="tab5">
+                  <br>
+                  <h3>
+                    <strong>Step 5</strong>- Review</h3>
+                  {{> workflowDetail}}
+                </div>
+
+                {{> WorkFlowWizardAction}}
+
+                {{#if error}}
+                  <div class="alert alert-danger fade in margin-top-20">
+                    <button class="close" data-dismiss="alert">x</button>
+                    <i class="fa-fw fa fa-times"></i>
+                    <strong>
+                      Error!
+                    </strong>
+                    {{error}}
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- WIDGET END -->
+    </div>
+  </section>
+</template>
+
+
+<template name="workflowDetail">
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+          <h5>
+            <strong>{{i18n 'workflow'}}</strong>
+          </h5>
+          {{#with current}}
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th style="width:50%">{{i18n 'name'}}</th>
+                    <th style="width:30%">{{i18n 'description'}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{name}}</td>
+                    <td>{{description}}</td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h5>
+              <strong>{{i18n 'deviceGroups'}}</strong>
+            </h5>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th style="width:30%">Name</th>
+                    <th style="width:30%">Description</th>
+                    <th style="width:40%">Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each groupsInCurrent}}
+                    <tr>
+                      <td>{{name}}</td>
+                      <td>{{description}}</td>
+                      <td>Dynamic</td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+
+            <h5>
+              <strong>{{i18n 'operationParams'}}</strong>
+            </h5>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width:50%">{{i18n 'type'}}</th>
+                    <th style="width:50%">{{i18n 'description'}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each actionsInCurrent}}
+                    <tr>
+                      <td>{{actionType}}</td>
+                      <td>{{getActionName}}</td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+
+              </table>
+            </div>
+
+            <h5>
+              <strong>{{i18n 'selectTriggerParams'}}</strong>
+            </h5>
+            <div id="triggerParams">
+            </div>
+          {{/with}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,42 @@
+<template name="connect">
+  <!-- widget grid -->
+  <section id="widget-grid" class="">
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <h1>Connect to GigaCenter</h1>
+        <hr style="border-top-color:#ddd;">
+        <p>
+          <strong>
+            Connect to the Graphical User Interface of the device
+          </strong>
+        </p>
+        {{#if loading}}
+          <div>
+            <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Preparing to connect...</h1>
+          </div>
+        {{else}}
+           {{#if error}}
+                  <div class="alert alert-danger fade in margin-top-20">
+                    <button class="close" data-dismiss="alert">x</button>
+                    <i class="fa-fw fa fa-times"></i>
+                    <strong>
+                      Error!
+                    </strong>
+                    {{error}}
+                  </div>
+          
+          {{else}}
+            <div>
+              <a href= {{remoteUrl}} target="_blank" class="cutThrough">
+                <button class="btn btn-default btn-orange">Connect</button>
+              </a>
+            </div>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+
+  </section>
+  <!-- end widget grid -->
+</template>

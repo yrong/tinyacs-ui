@@ -1,0 +1,86 @@
+<template name='fileserver'>
+  <section id="widget-grid" class="">
+
+            
+            <div class="row top-margin-20" id="fileserver">
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+                    <h1>{{i18n 'fileserver'}}</h1>
+                    <div id="confirmDialog" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+                        <button class="btn-warning pull-right cancel" style="margin-top:-2px;margin-left:6px;">{{i18n 'cancel'}}</button>
+                        <button class="btn-warning pull-right confirm" style="margin-top:-2px;">{{i18n 'confirm'}}</button>
+                        <strong>Are you sure you want to delete the selected file server?</strong>
+                        <span style="margin-left:10px;"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                  <th>{{i18n 'name'}}</th>
+                                  <th>{{i18n 'description'}}</th>
+                                  <th>{{i18n 'url'}}</th>
+                                  <!--th>Type</th-->
+                                  <th>{{i18n 'username'}}</th>
+                                  <th style="width:42px;"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {{#each fileservers}}
+                            <tr class="fileserver">
+                                <td>{{name}}</td>
+                                <td>{{description}}</td>
+                                <td>{{baseUrl}}</td> 
+                                <!--td>All</td-->
+                                <td>{{username}}</td>                          
+                                <td><i class="fa fa-lg fa-fw fa-trash-o"></i></td>
+                            </tr>
+                            {{/each}}
+                              <!--tr class="fileserver">
+                                  <td>image-844e-v1.0</td>
+                                  <td>image-844e-v1.0</td>
+                                  <td>http://192.168.1.1:80/image</td> 
+                                  <td>Image File</td>
+                                  <td>ron</td>
+                                  <td>...</td>                          
+                                  <td><i class="fa fa-lg fa-fw fa-trash-o"></i></td>
+                              </tr>
+                              <tr class="fileserver">
+                                  <td>config-844e-v1.0</td>
+                                  <td>config-844e-v1.0</td>
+                                  <td>http://192.168.1.2:81/config</td>  
+                                  <td>Config File</td>
+                                  <td></td>
+                                  <td></td>                          
+                                  <td><i class="fa fa-lg fa-fw fa-trash-o"></i></td>
+                              </tr-->
+                          </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        {{#if noserverexist}}
+                            <div class="pull-right">
+                                <a>
+                                    <button type="submit" class="btn btn-default btn-orange">New File Server</button>
+                                </a>
+                            </div>
+                        {{/if}}
+                        <div style="clear:both;"></div>
+                        {{#if error}}
+                              <div class="alert alert-danger fade in margin-top-20">
+                                <button class="close" data-dismiss="alert">x</button>
+                                <i class="fa-fw fa fa-times"></i>
+                                <strong>
+                                  Error!
+                                </strong>
+                                {{error}}
+                              </div>              
+                        {{/if}}
+                    </div>
+                </div>
+
+                
+            </div>
+            
+
+    </section>
+</template>
+

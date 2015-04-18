@@ -1,0 +1,52 @@
+<template name="troubleshootingSSID">
+  {{#if ready}}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        {{#if error}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>Error!&nbsp;</strong>{{error}}
+          </div>
+        {{/if}}
+        {{#with getSsid}}
+          <h5 class="margin-top-20">
+            <strong>SSIDs</strong>
+          </h5>
+          <table class="table table-hover table-responsive">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Service</th>
+                <th>Broadcasting</th>
+                <th>Security</th>
+                <th>Encryption</th>
+                <th>FrequencyBand</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each wlans}}
+                <tr class="wlan" style="{{style}}">
+                  <td>{{SSID}}</td>
+                  <td>{{status "Enable"}}</td>
+                  <td>{{status "SSIDAdvertisementEnabled"}}</td>
+                  <td>{{beaconType}}</td>
+                  <td>
+                    {{#unless securityOffState}}
+                      {{encryption}}
+                    {{/unless}}
+                  </td>
+                  <td>{{frequencyBand}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        {{/with}}
+      </div>
+    </div>
+  {{else}}
+    <div>
+      <h1 class="ajax-loading-animation margin-top-20"><i class="fa fa-cog fa-spin"></i> Loading...</h1>
+    </div>
+  {{/if}}
+</template>

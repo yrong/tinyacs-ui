@@ -1,0 +1,64 @@
+<template name="traceroute">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+      <form class="form-horizontal margin-top-20" role="form" id="form-traceroute">
+        <div class="form-group">
+          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label style="margin-top:6px;"></label>
+          </div>
+          <div class="col-xs-7 col-sm-8 col-md-7 col-lg-7">
+            <input id="input-traceHost" name="tracerouteHost" class="form-control" placeholder="Host/IP Address">
+          </div>
+          <div class="col-xs-3 col-sm-2 col-md-3 col-lg-3">
+            <button id="btn-traceroute" class="btn btn-orange pull-right">Start Traceroute</button>
+          </div>
+          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="traceroute_error_place">
+          </div>
+          {{componentStatus}}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row margin-top-20">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      {{#if ready}}
+        {{#if error}}
+          <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>Error!&nbsp;</strong>{{error}}
+          </div>
+        {{else}}
+          <h5>
+            <strong>Traceroute Results</strong>
+          </h5>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Hops</th>
+                  <th>Time</th>
+                  <th>Host/IP&nbsp;Address</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each hops}}
+                  <tr class="wlan {{rowSelected}}">
+                    <td>{{index}}</td>
+                    <td>{{time1}}&nbsp;ms</td>
+                    <td>{{HopHost}}&nbsp;({{HopHostAddress}})</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{/if}}
+      {{/if}}
+      {{#if loading}}
+        <h1><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;Tracing ...</h1>
+      {{/if}}
+    </div>
+  </div>
+</template>

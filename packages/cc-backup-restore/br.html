@@ -1,0 +1,130 @@
+<template name="br">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+                <div style="margin-bottom: 25px">
+                    <h1 class="page-title no-margin">
+                        <div class="connect-icon"></div>
+                      {{i18n 'systemTools'}}
+                        <span>&gt; {{i18n 'backup'}} &amp; {{i18n 'restore'}}</span>
+                    </h1>
+                </div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills" role="tablist">
+                    <li class= {{isActive 'backup'}}><a href="#backup" role="tab" data-toggle="pill">{{i18n 'backup'}}</a>
+                    </li>
+                    <li class= {{isActive 'restore'}}><a href="#restore" role="tab" data-toggle="pill">{{i18n 'restore'}}</a>
+                    </li>
+                </ul>
+                <div class="tab-content margin-top-20">
+                  {{> backup}}
+                  {{> restore}}
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+
+<template name="backup">
+    <div id="backup" class="tab-pane margin-top-20 {{isActive 'backup'}}">
+
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="inputDescription" class="col-sm-3" style="align:left">{{i18n 'description'}}&nbsp;&nbsp;(optional)</label>
+
+                <div class="col-sm-9">
+                    <input type="description" class="form-control" id="inputDescription" placeholder="Description">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button type="backup" class="btn btn-orange" disabled= {{backupLoading}}>{{i18n 'startBackup'}}</button>
+                </div>
+            </div>
+        </form>
+        <div class="margin-top-20">
+            <strong>{{i18n 'status'}}&nbsp;&nbsp;
+              {{#if backupLoading}}
+                  <i class="fa fa-cog fa-spin"></i>
+              {{/if}}
+            </strong>
+            <div class="console-box" id="backup-status">
+              {{#each backupResults}}
+                  <span>{{time}}</span>&nbsp;{{description}}
+                  <br>
+              {{/each}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="restore">
+  <div id="restore" class="tab-pane margin-top-20 {{isActive 'restore'}}">
+
+    <div id="configFilesContainer" class="table-responsive hidden">
+      {{> configFiles}}
+    </div>
+      
+    <div class="alert alert-warning fade in" style="margin-top: 24px">
+      <div style="margin-bottom: 12px">
+          <strong>
+            {{i18n 'restoreWarning'}}
+          </strong>
+      </div>
+    
+      {{#if restoreConfirm}}
+          <div id="confirmDialog" style="display: block;">
+              <button id="btn-cancel" class="btn btn-orange pull-right" style="padding: 4px 10px; margin-top: -5px; margin-left:6px;">{{i18n 'cancel'}}</button>
+              <button id="btn-confirm" class="btn btn-orange pull-right" style="padding: 4px 10px; margin-top: -5px;">{{i18n 'confirm'}}</button>
+              <i class="fa-fw fa fa-warning"></i>
+            {{i18n 'restoreConfirmation'}}
+          </div>
+      {{else}}
+          <div style="display: block;">
+              <button id="btn-restore" class="btn btn-orange pull-right {{#if restoreRunning}}disabled{{/if}}" style="padding: 4px 10px; margin-top: -5px;">{{i18n 'restore'}}</button>
+              <strong>&nbsp;</strong>
+          </div>
+      {{/if}}
+    </div>
+
+        <div class="margin-top-20">
+            <strong>{{i18n 'status'}}&nbsp;&nbsp;
+              {{#if restoreLoading}}
+                  <i class="fa fa-cog fa-spin"></i>
+              {{/if}}
+            </strong>
+            <div class="console-box" id="restore-status">
+              {{#each restoreResults}}
+                  <span>{{time}}</span>&nbsp;{{description}}
+                  <br>
+              {{/each}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="configFiles">
+    <table id="configFiles" class="table table-hover">
+        <thead>
+        <tr>
+            <th class="one-icon"></th>
+            <th>{{i18n 'time'}}</th>
+            <th>{{i18n 'user'}}</th>
+            <th>{{i18n 'description'}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each files}}
+            <tr>
+                <td>
+                    <input type="radio" name="radio-inline" id="{{_id}}" checked= {{isSelected _id}}>
+                </td>
+                <td>{{getTime}}</td>
+                <td>{{csrUsername}}</td>
+                <td>{{description}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+</template>

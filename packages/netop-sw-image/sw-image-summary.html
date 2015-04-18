@@ -1,0 +1,101 @@
+<template name="swImageSummary">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+      <div style="margin-bottom: 25px">
+        <h1 class="page-title no-margin">
+          <div class="connect-icon"></div>
+          {{i18n "networkOperations"}}
+          <span>&gt;&nbsp;{{i18n "swImage"}}</span>
+        </h1>
+      </div>
+      <h1>{{i18n "swImage"}}</h1>
+      <div class="margin-top-20">
+        {{#if ready}}
+          {{#if error}}
+            <div class="alert alert-danger fade in margin-top-20">
+              <button class="close" data-dismiss="alert">×</button>
+              <i class="fa-fw fa fa-times"></i>
+              <strong>
+                {{i18n 'error'}}!
+              </strong>
+              {{error}}
+            </div>
+          {{/if}}
+          {{> swImageTable}}
+          <div style="clear:both"></div>
+          <div class="pull-right" style="margin-top: 10px;">
+            <button id="btn-newSWImage" class="btn btn-orange">Add SW Image</button>
+          </div>
+        {{else}}
+          <div>
+            <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="swImageTable">
+  <div id="deleteConfirmDialog" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+    <button class="btn btn-warning pull-right" id="btn-cancelDeleteDialog" style="padding: 4px 10px; margin-top: -5px; margin-left:6px;">Cancel</button>
+    <button class="btn btn-warning pull-right" id="btn-confirmDeleteDialog" style="padding: 4px 10px; margin-top: -5px;">Confirm</button>
+    <strong>{{i18n 'warning'}}!</strong>
+    <span style="margin-left:10px;"></span>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>{{i18n 'name'}}</th>
+          <th>{{i18n 'description'}}</th>
+          <th>{{i18n 'version'}}</th>
+          <th style="width:42px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each swImage}}
+          <tr>
+            <td>{{name}}</td>
+            <td>{{description}}</td>
+            <td>{{version}}</td>
+            <td>
+              <i class="fa fa-lg fa-fw fa-trash-o" data-toggle="tooltip" data-placement="right" title="Delete" style="cursor:pointer"></i>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class="pull-left">
+    Showing
+    <span>
+      <strong>{{startNumber}}</strong>
+    </span>to
+    <span>
+      <strong>{{endNumber}}</strong>
+    </span>of
+    <span style="color:#3b9ff3">
+      <strong>{{count}}</strong>
+    </span>
+    entries
+  </div>
+  <div class="pull-right">
+    <ul class="pagination" style="margin:0;">
+      <li id="first">
+        <a href="javascript::void(0)"><i class="fa fa-angle-double-left"></i></a>
+      </li>
+      <li id="pre"><a href="javascript:void(0)"><i class="fa fa-angle-left"></i></a>
+      </li>
+      {{#each pageNumbers}}
+        <li id="{{pageNumber}}"><a href="javascript:void(0)">{{pageNumber}}</a>
+        </li>
+      {{/each}}
+      <li id="post"><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a>
+      </li>
+      <li id="last">
+        <a href="javascript::void(0)"><i class="fa fa-angle-double-right"></i></a>
+      </li>
+    </ul>
+  </div>
+</template>

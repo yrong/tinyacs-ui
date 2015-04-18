@@ -1,0 +1,74 @@
+<template name="troubleshootingWan">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+      <div style="margin-bottom: 25px">
+        <h1 class="page-title no-margin">
+          <div class="connect-icon"></div>
+          Troubleshooting
+          <span>&gt; WAN</span>
+          
+        </h1>
+      </div>
+      <!-- Nav tabs -->
+      <ul id="wanTabs" class="nav nav-pills" role="tablist">
+        <li class="active"><a href="#summary" role="tab" data-toggle="pill">Summary</a>
+        </li>
+        <li><a href="#ping" role="tab" data-toggle="pill">Ping</a>
+        </li>
+        <li><a href="#traceroute" role="tab" data-toggle="pill">Traceroute</a>
+        </li>
+      </ul>
+
+      <div class="margin-top-20">
+      {{#if interfacesReady}}
+        {{#if interfacesError}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>
+              Error!
+            </strong>
+            {{interfacesError}}
+          </div>
+        {{/if}}
+        {{#if interfaces}}
+          <div class="row">
+            <div class="col-md-2">
+              <label style="margin-top:6px;"><b>WAN Connections</b></label>
+            </div>
+            <div class="col-md-10">
+              <select id="wan-interfaces" class="form-control" disabled={{refreshing}}>
+                {{#each interfaces}}
+                  <option value="{{_Index}}">{{Name}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          {{interfaceSelected}}
+        {{/if}}
+      {{else}}
+        <div>
+          <h2 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading WAN Connections ...</h2>
+        </div>
+      {{/if}}
+      </div>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <!-- WAN Summary -->
+        <div class="tab-pane active" id="summary">
+          {{> wansummary}}
+        </div>
+        <!-- Ping -->
+        <div class="tab-pane" id="ping">
+          {{> ipping}}
+        </div>
+        <!-- Traceroute -->
+        <div class="tab-pane" id="traceroute">
+          {{> traceroute}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</template>

@@ -1,0 +1,69 @@
+<template name='dialplan'>
+  <section id="widget-grid" class="">
+
+            
+            <div class="row top-margin-20" id="dialplan">
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+
+                    <h1>{{i18n 'dialPlan'}}</h1>
+                    <div id="confirmDialog" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+                        <button class="btn-warning pull-right cancel" style="margin-top:-2px;margin-left:6px;">Cancel</button>
+                        <button class="btn-warning pull-right confirm" style="margin-top:-2px;">Confirm</button>
+                        <strong>{{i18n 'deletePrompt'}}{{i18n 'dialPlanLowerCase'}}?</strong>
+                        <span style="margin-left:10px;"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                  <th>{{i18n 'name'}}</th>
+                                  <th>{{i18n 'description'}}</th>
+                                  <th>{{i18n 'digitShortTimer'}}(s)</th>
+                                  <th>{{i18n 'digitLongTimer'}}(s)</th>
+                                  <th>{{i18n 'rules'}}</th>
+                                  <th style="width:42px;"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {{#each dialplans}}
+                            <tr class="dialplan">
+                                <td>{{name}}</td>
+                                <td>{{description}}</td>
+                                <td>{{shortTimer}}</td> 
+                                <td>{{longTimer}}</td>
+                                <td>{{rules}}</td>                          
+                                <td><i class="fa fa-lg fa-fw fa-trash-o"></i></td>
+                            </tr>
+                            {{/each}}
+                              
+                          </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="pull-right">
+                            <a>
+                                <button type="submit" class="btn btn-default btn-orange">New Dial Plan</button>
+                            </a>
+                        </div>
+                      
+                        <div style="clear:both;"></div>
+                        {{#if error}}
+                              <div class="alert alert-danger fade in margin-top-20">
+                                <button class="close" data-dismiss="alert">x</button>
+                                <i class="fa-fw fa fa-times"></i>
+                                <strong>
+                                  Error!
+                                </strong>
+                                {{error}}
+                              </div>              
+                        {{/if}}
+                    </div>
+                </div>
+
+                
+            </div>
+            
+
+    </section>
+</template>
+

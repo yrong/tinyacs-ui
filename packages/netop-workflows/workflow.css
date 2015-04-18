@@ -1,0 +1,15 @@
+.workflow-status {
+  margin-left: 25px;
+}
+.red {
+  color: red;
+}
+.green {
+  color: #2ecc71;
+}
+.fa-eye:hover {
+  color: #3b9ff3;
+}
+.fa-check-circle-o:hover, .fa-trash-o:hover {
+  color: red;
+}

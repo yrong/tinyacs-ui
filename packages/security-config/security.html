@@ -1,0 +1,190 @@
+<template name="security">
+  <section id="widget-grid" class="">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div style="margin-bottom: 25px">
+          <h1 class="page-title no-margin">
+            <div class="connect-icon"></div>
+            {{i18n 'configuration'}}
+            <span>&gt; {{i18n 'security'}}</span>
+          </h1>
+        </div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-pills" role="tablist">
+          <li class="active"><a href="#portforwarding" role="tab" data-toggle="pill">{{i18n 'portForwarding'}}</a>
+          </li>
+          <!--li><a href="#macfiltering" role="tab" data-toggle="pill">MAC Filtering</a></li>
+            <li><a href="#firewall" role="tab" data-toggle="pill">Firewall</a></li-->
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="portforwarding">
+            <br>
+            {{#if summaryPage}}
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>{{i18n 'name'}}</th>
+                      <th>{{i18n 'lanHost'}}</th>
+                      <th>{{i18n 'ports'}}</th>
+                      <th class="one-icon"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each cpeMappings}}
+                      <tr>
+                        <td>{{PortMappingDescription}}</td>
+                        <td>{{getHostNameFromIP InternalClient}}</td>
+                        <td>
+                          <!--
+                              {{PortsInfo}}
+                          -->
+                          {{#each value}}
+                            {{PortInfo}}&nbsp;
+                          {{/each}}
+                        </td>
+                        <td><i data-instance= {{PortMappingInstance}} class="fa fa-lg fa-fw fa-trash-o"></i>
+                        </td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+              <div class="pull-right">
+                <a>
+                  <button id="new" class="btn btn-orange" disabled= {{disabled}}>{{i18n 'new'}}</button>
+                </a>
+              </div>
+
+            {{else}}
+              <form class="form-horizontal" role="form" onSubmit="return false;">
+                <div class="form-group" id="application">
+                  <label for="inputApplication" class="col-sm-2 control-label">{{i18n 'application'}}
+                  </label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="inputApplication">
+                      {{#each availableMappings}}
+                        <option>{{PortMappingDescription}}</option>
+                      {{/each}}
+                      <option value="" disabled="disabled">──────────</option>
+                      <option style="font-style:italic; font-weight:bold;">{{i18n 'newEntry'}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                {{#with selected}}
+                  {{#if isExisted}}
+                    <div class="table-responsive" style="margin-left:10px">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>{{i18n 'remoteStartPort'}}</th>
+                            <th>{{i18n 'remoteEndPort'}}</th>
+                            <th>{{i18n 'localStartPort'}}</th>
+                            <th>{{i18n 'localEndPort'}}</th>
+                            <th>{{i18n 'protocol'}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {{#each mappingsSelected}}
+                            <tr>
+                              <td>{{ExternalPort}}</td>
+                              <td>{{X_BROADCOM_COM_ExternalPortEnd}}</td>
+                              <td>{{InternalPort}}</td>
+                              <td>{{X_BROADCOM_COM_InternalPortEnd}}</td>
+                              <td>{{PortMappingProtocol}}</td>
+                            </tr>
+                          {{/each}}
+                        </tbody>
+                      </table>
+                    </div>
+                  {{else}}
+                    <div class="form-group">
+                      <label for="inputNewApplication" class="col-sm-2 control-label">{{i18n 'name'}}</label>
+                      <div class="col-sm-10">
+                        <input type="newapplication" class="form-control" id="inputNewApplication" name="inputNewApplication" placeholder="{{i18n 'name'}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputProtocol" class="col-sm-2 control-label">{{i18n 'protocol'}}</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" id="inputProtocol">
+                          <option>{{i18n 'tcp'}}</option>
+                          <option>{{i18n 'udp'}}</option>
+                          <option value="TCP or UDP">{{i18n 'tcpUdp'}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputStartPort" class="col-sm-2 control-label">{{i18n 'remotePort'}}</label>
+                      <div class="col-sm-10">
+                        <input type="startport" class="form-control" id="inputStartPort" name="inputStartPort" placeholder="1-65535">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEndPort" class="col-sm-2 control-label">{{i18n 'remoteEndPort'}}</label>
+                      <div class="col-sm-10">
+                        <input type="endport" class="form-control" id="inputEndPort" name="inputEndPort" placeholder="{{i18n 'leaveBlankSameRemotePort'}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputTargetPort" class="col-sm-2 control-label">{{i18n 'localPort'}}</label>
+                      <div class="col-sm-10">
+                        <input type="targetport" class="form-control" id="inputTargetPort" name="inputTargetPort" placeholder="{{i18n 'leaveBlankSameRangeRemote'}}">
+                      </div>
+                    </div>
+                  {{/if}}
+                {{/with}}
+
+                <div class="form-group">
+                  <label for="inputLanHost" class="col-sm-2 control-label">{{i18n 'lanHost'}}</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="inputLanHost" name="inputLanHost">
+                      <!--
+                      <option>192.168.1.11</option>
+                      <option>192.168.1.13</option>
+                      -->
+                      {{#each lanHosts}}
+                        <option value= {{value.IPAddress}}>{{hostName}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-orange" disabled= {{disabled}}>{{i18n 'submit'}}</button>
+                    <button type="cancel" class="btn btn-orange">{{i18n 'cancel'}}</button>
+                  </div>
+                </div>
+              </form>
+            {{/if}}
+
+            <div style="clear:both;"></div>
+            {{#if loading}}
+              <div>
+                <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> {{i18n 'loading'}}</h1>
+              </div>
+            {{/if}}
+
+            {{#if error}}
+              <div class="alert alert-danger fade in margin-top-20">
+                <button class="close" data-dismiss="alert">x</button>
+                <i class="fa-fw fa fa-times"></i>
+                  <strong>{{i18n 'errorExclamation'}}&nbsp;</strong>{{error}}
+              </div>
+            {{/if}}
+          </div>
+          <div class="tab-pane" id="macfiltering">
+          </div>
+          <div class="tab-pane" id="firewall">
+          </div>
+        </div>
+        <!-- end tabs -->
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+  </section>
+</template>

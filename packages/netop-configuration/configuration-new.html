@@ -1,0 +1,105 @@
+<template name="configurationNew">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+      <div style="margin-bottom: 25px">
+        <h1 class="page-title no-margin">
+          <div class="connect-icon"></div>
+          Network Operations
+          <span>&gt;&nbsp;{{i18n "configurationFiles"}}</span>
+        </h1>
+      </div>
+      <h1>{{i18n "configurationFiles"}}</h1>
+      <div class="margin-top-20">
+        {{#if error}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>
+              Error!
+            </strong>
+            {{error}}
+          </div>
+        {{/if}}
+        <form class="smart-form" id="form-configurationCreate">
+          <section>
+            <div class="row">
+              <label class="col col-xs-4 col-sm-4 col-md-3 col-lg-2">File</label>
+              <div class="col col-xs-8 col-sm-8 col-md-9 col-lg-10">
+                <label class="input input-file">
+                  <span class="button" style="background-color: #e87b00;border-radius:2px;opacity:1;">
+                    <input type="file" id="input-configurationFile">Browse
+                  </span>
+                  <input type="text" id="input-configurationFilename" name="input-configurationFilename" placeholder="File" readonly="">
+                </label>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="row">
+              <label class="col col-xs-4 col-sm-4 col-md-3 col-lg-2">Type</label>
+              <div class="col col-xs-8 col-sm-8 col-md-9 col-lg-10">
+                <label class="input">
+                  <select class="form-control" id="fileType" name="fileType" disabled>
+                        <option value=""></option>
+                        <option value="Configuration File">Golden Configuration File</option>
+                        <option value="SIP Configuration File">SIP Configuration File</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="row">
+              <label class="col col-xs-4 col-sm-4 col-md-3 col-lg-2">Version</label>
+              <div class="col col-xs-8 col-sm-8 col-md-9 col-lg-10">
+                <label class="input">
+                  <input type="text" id="input-configurationVersion" name="configurationVersion" placeholder="Version">
+                </label>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="row">
+              <label class="col col-xs-4 col-sm-4 col-md-3 col-lg-2">Name</label>
+              <div class="col col-xs-8 col-sm-8 col-md-9 col-lg-10">
+                <label class="input">
+                  <input type="text" id="input-configurationName" name="configurationName" placeholder="Name">
+                </label>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="row">
+              <label class="col col-xs-4 col-sm-4 col-md-3 col-lg-2">Description(optional)</label>
+              <div class="col col-xs-8 col-sm-8 col-md-9 col-lg-10">
+                <label class="input">
+                  <input type="text" id="input-configurationDescription" name="configurationDescription" placeholder="Description">
+                </label>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div id="confirmUpdateDialog" class="alert alert-warning alert-dismissible" role="alert" style="display:none;">
+              <button class="btn btn-warning pull-right" id="btn-cancelUpdateDialog" style="padding: 4px 10px; margin-top: -5px; margin-left:6px;">Cancel</button>
+              <button class="btn btn-warning pull-right" id="btn-confirmUpdateDialog" style="padding: 4px 10px; margin-top: -5px;">Confirm</button>
+              <strong>Warning!</strong>
+              <span style="margin-left:10px;">
+              </span>
+            </div>
+            <div class="row" id="confirmCreateDialog">
+              <div class="col col-12 pull-right">
+                <button id="btn-submitConfiguration" class="btn btn-orange" style="{{#if uploading}}padding-left:8px;{{/if}}">
+                  {{#if uploading}}
+                    <i class="fa fa-lg fa-fw fa-spinner fa-spin"></i>
+                  {{/if}}
+                  Submit
+                </button>
+                <button id="btn-cancelConfiguration" class="btn btn-orange">Cancel</button>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>

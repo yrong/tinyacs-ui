@@ -1,0 +1,33 @@
+<template name="wificonfig">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+      <div style="margin-bottom: 25px">
+        <h1 class="page-title no-margin">
+          <div class="connect-icon"></div>
+          Configuration
+          <span>&gt; Wireless</span>
+        </h1>
+      </div>
+      <ul class="nav nav-pills" role="tablist">
+        <li id="liRadio2"><a href="#radio2" role="tab" data-toggle="pill">2.4 GHz Radio</a>
+        </li>
+        <li id="liRadio5"><a href="#radio5" role="tab" data-toggle="pill">5.0 GHz Radio</a>
+        </li>
+        <li id="liSsidManager"><a href="#ssidManager" role="tab" data-toggle="pill">SSID Manager</a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane" id="radio2">
+          {{> radio type='2'}}
+        </div>
+        <div class="tab-pane" id="radio5">
+          {{> radio type='5'}}
+        </div>
+        <div class="tab-pane" id="ssidManager">
+          {{> ssid}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,9 @@
+1. Meteor 0.9.x -> 0.8.3
+
+sed -i -e s/iron:router/iron-router/g `git grep iron:router | awk -F: '$1 ~ /^.*package\.js$/ { print $1 }'`
+sed -i -e s/mrt:moment/moment/g `git grep mrt:moment | awk -F: '$1 ~ /^.*package\.js$/ { print $1 }'`
+
+2. Meteor 0.8.3 -> 0.9.x
+
+sed -i -e s/iron-router/iron:router/g `git grep iron-router | awk -F: '$1 ~ /^.*package\.js$/ { print $1 }'`
+sed -i -e s/use\(\'moment\'/use\(\'mrt:moment\'/g `git grep moment | awk -F: '$1 ~ /^.*package\.js$/ { print $1 }'`

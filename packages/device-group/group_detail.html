@@ -1,0 +1,160 @@
+<template name="groupdetail">
+    <div class="row top-margin-20">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+            <div style="margin-bottom: 25px">
+                <h1 class="page-title no-margin">
+                    <div class="connect-icon"></div>{{i18n "deviceGroups"}}
+                    <span>&gt; {{i18n "deviceGroup"}}</span>
+                </h1>
+            </div>
+            <h1>{{i18n "deviceGroup"}}</h1>
+            <hr>
+            <form class="form-horizontal group-form" role="form" onSubmit="return false;">
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-2">{{i18n 'name'}}</label>
+                    <div class="col-sm-10">
+                        <input type="name" class="form-control" name="inputName" id="inputName" placeholder="{{i18n 'name'}}" value={{name}} disabled= {{disabled}}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputDescription" class="col-sm-2">{{i18n 'description'}}
+                        <br>{{i18n 'optional'}}</label>
+                    <div class="col-sm-10">
+                        <input type="description" class="form-control" id="inputDescription" placeholder="{{i18n 'description'}}" value={{description}}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">{{i18n 'rules'}}</label>
+                    <div class="col-sm-10" id="rules">
+                        <div id="allRules">
+							{{#each rules}}
+                                <div id="rule-{{index}}" class="row" style="margin-bottom:10px">
+                                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                        <select class="form-control" id="inputKey-{{index}}" disabled>
+                                            <option value= {{key}}>{{keydesc}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                        <select class="form-control" id="inputOperator-{{index}}">
+											{{#each getOperatorOptions}}
+                                                <option value= {{value}} selected= {{selected}}>{{desc}}</option>
+											{{/each}}
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										{{#if isText}}
+                                            <input class="form-control" type="text" id="inputValue-{{index}}" value= {{value}}>
+										{{else}}
+                                            <select class="form-control" id="inputValue-{{index}}" multiple= {{isArray}}>
+												{{#each getValueOptions}}
+                                                    <option value= {{value}} selected= {{selected}}>{{desc}}</option>
+												{{/each}}
+                                            </select>
+										{{/if}}
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                                        <i class="fa fa-lg fa-fw fa-trash-o pull-right" id="deleteRow-{{index}}" style="margin-top:9px"></i>
+                                    </div>
+                                </div>
+							{{/each}}
+                        </div>
+						{{#with getError}}
+                            <div class="alert alert-danger fade in margin-top-20">
+                                <button class="close" data-dismiss="alert">x</button>
+                                <i class="fa-fw fa fa-times"></i>
+                                <strong>
+                                    Error!
+                                </strong>
+								{{getError}}
+                            </div>
+						{{/with}}
+
+						{{#if allowNew}}
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-1 col-md-offset-11 col-lg-1 col-lg-offset-11">
+                                    <i class="fa fa-lg fa-fw fa-plus-square-o pull-right" id="addRow-0" style="margin-top:9px;"></i>
+                                </div>
+                            </div>
+						{{/if}}
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-orange">{{i18n 'submit'}}</button>
+                        <button type="reset" class="btn btn-orange btn-cancel-form">{{i18n 'cancel'}}</button>
+                    </div>
+                </div>
+            </form>
+            <div id="deviceGroupDetails">
+                <i class="fa fa-lg fa-fw fa-refresh pull-right refresh-gray" style="margin-top:6px"></i>
+                <h5 class="top-margin-35">{{i18n 'matchingDevices'}}</h5>
+                <div class="table-responsive top-margin-10">
+                    <div id="cpes_wrapper" class="dataTables_wrapper no-footer">
+                        <div class="dataTables_length" id="cpes_length" style="display:none">
+                            <label>{{i18n 'show'}}
+                                <select id="pagesize" name="pagesize" aria-controls="cpes" class="">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                </select>{{i18n 'entries'}}</label>
+                        </div>
+
+                        <table class="table table-hover dataTable" id="cpes">
+                            <thead>
+                            <tr>
+                                <th name="serialNumber" class="sorting_asc">FSAN</th>
+                                <th>{{i18n 'ipAddress'}}</th>
+                                <th>{{i18n 'manufacturer'}}</th>
+                                <th>{{i18n 'model'}}</th>
+                                <th>{{i18n 'softwareVersion'}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+							{{#each cpes}}
+                                <tr>
+                                    <td>{{serialNumber}}</td>
+                                    <td>{{getIp}}</td>
+                                    <td>{{manufacturer}}</td>
+                                    <td>{{modelName}}</td>
+                                    <td>{{softwareVersion}}</td>
+                                    <!--<td>{{hardwareVersion}}</td>-->
+                                </tr>
+							{{/each}}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+				{{#with total}}
+                    <div style="width:100%; height:33px">
+                        <div class="pull-left">
+                            <div id="dt_basic_info">
+                                Showing
+                <span>
+                  <strong>{{from}}</strong>
+                </span>{{i18n 'to'}}
+                <span>
+                  <strong>{{to}}</strong>
+                </span>{{i18n 'of'}}
+                <span style="color:#3b9ff3">
+                  <strong>{{count}}</strong>
+                </span>{{i18n 'entries'}}
+                            </div> 
+                        </div>
+                        <ul class="pagination pull-right" style="margin-top:-7px">
+                            <li class="prev {{noPrev}}"><a href="javascript:void(0)">&laquo;</a>
+                            </li>
+                            <li class="next {{noMore}}"><a href="javascript:void(0)">&raquo;</a>
+                            </li>
+                        </ul>
+                    </div>
+				{{/with}}
+
+            </div>
+        </div>
+    </div>
+
+</template>

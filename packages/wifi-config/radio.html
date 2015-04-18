@@ -1,0 +1,123 @@
+<template name="radio">
+  <div class="row" id="{{radioId type}}">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      {{#if radioSummaryReady type}}
+        {{#with radio type}}
+          <form class="smart-form text-align-left margin-top-20" role="form">
+            <section>
+              <div class="row">
+                <label class="col col-3">Wireless Radio</label>
+                <div class="col col-9" style="height: 32px">
+                  <label class="toggle pull-left">
+                    <input id="radioEnabled" type="checkbox" name="checkbox-toggle" checked="{{isEqual RadioEnabled 'true'}}">
+                    <i style="right:8px" data-swchon-text="ON" data-swchoff-text="OFF"></i>
+                  </label>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <label for="standard" class="col col-3">Mode</label>
+                <div class="col col-9">
+                  <select id="standard" class="form-control" placeholder="Mode">
+                    {{#if isType2 type}}
+                      <option selected="{{isEqual Standard 'b'}}" value='b'>802.11b</option>
+                      <option selected="{{isEqual Standard 'n'}}" value='n'>802.11n</option>
+                      <option selected="{{isEqual Standard 'bg'}}" value='bg'>802.11b, 802.11g</option>
+                      <option selected="{{isEqual Standard 'gn'}}" value='gn'>802.11g, 802.11n</option>
+                      <option selected="{{isEqual Standard 'bgn'}}" value='bgn'>802.11b, 802.11g, 802.11n</option>
+                    {{else}}
+                      <option selected="{{isEqual Standard 'n'}}" value='n'>802.11n</option>
+                      <option selected="{{isEqual Standard 'ac'}}" value='ac'>802.11ac</option>
+                    {{/if}}
+                  </select>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <label for="bandwidth" class="col col-3">Bandwidth</label>
+                <div class="col col-9">
+                  <select class="form-control" id="bandwidth" placeholder="Bandwidth">
+                    {{#each bandwidths}}
+                      <option selected="{{selected}}" value="{{value}}">{{text}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <label for="channel" class="col col-3">Channel</label>
+                <div class="col col-9">
+                  <select class="form-control" id="channel" placeholder="Channel">
+                    {{#each channels}}
+                      <option selected="{{selected}}">{{value}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="row">
+                <label for="transmitPower" class="col col-3">Power Level</label>
+                <div class="col col-9">
+                  <select class="form-control" id="transmitPower" placeholder="Power Level">
+                    {{#each transmitPowers "10,20,30,40,50,60,70,80,90,100"}}
+                      <option selected="{{selected}}">{{value}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+              </div>
+            </section>
+          {{#unless isType5 type}}
+            <section>
+              <div class="row">
+                <label class="col col-3">Multicast Forwarding</label>
+                <div class="col col-9" style="height: 32px">
+                  <label class="toggle pull-left">
+                    <input id="multicastForwardEnable" type="checkbox" name="checkbox-toggle" checked="{{isEqual X_CALIX_MulticastForwardEnable 'true'}}">
+                    <i style="right:8px;" data-swchon-text="ON" data-swchoff-text="OFF"></i>
+                  </label>
+                </div>
+              </div>
+            </section>
+            {{/unless}}
+            {{#if isType5 type}}
+              <section>
+                <div class="row">
+                  <label class="col col-3">DFS</label>
+                  <div class="col col-9" style="height: 32px">
+                    <label class="toggle pull-left">
+                      <input id="dfsEnable" type="checkbox" name="checkbox-toggle" checked="{{isEqual X_000631_EnableDfsChannels 'true'}}">
+                      <i style="right:8px;" data-swchon-text="ON" data-swchoff-text="OFF"></i>
+                    </label>
+                  </div>
+                </div>
+              </section>
+            {{/if}}
+          </form>
+          <div class="row margin-top-20">
+            <div class="col-sm-12">
+              <div class="pull-right">
+                <button id="submit" disabled='disabled' type="submit" class="btn btn-orange">Submit</button>
+                <button id="cancel" disabled='disabled' type="cancel" class="btn btn-orange">Cancel</button>
+              </div>
+            </div>
+          </div>
+        {{/with}}
+        {{#if radioError type}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close " data-dismiss="alert ">×</button>
+            <i class="fa-fw fa fa-times "></i>
+            <strong>Error!&nbsp;</strong>{{radioError type}}
+          </div>
+        {{/if}}
+      {{else}}
+        <div>
+          <h1 class="ajax-loading-animation margin-top-20"><i class="fa fa-cog fa-spin "></i> Loading...</h1>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</template>

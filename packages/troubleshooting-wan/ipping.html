@@ -1,0 +1,73 @@
+<template name="ipping">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <form class="form-horizontal margin-top-20" role="form" id="form-ipping">
+        <div class="form-group">
+          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label style="margin-top:6px;"></label>
+          </div>
+          <div class="col-xs-7 col-sm-8 col-md-8 col-lg-8">
+            <input id="input-pingAddress" name="ipaddress" class="form-control" placeholder="Host/IP Address">
+          </div>
+          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
+            <button id='btn-ipping' class="btn btn-orange pull-right">Start Ping</button>
+          </div>
+          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="ipping_error_place">
+          </div>
+          {{componentStatus}}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row margin-top-10">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      {{#if ready}}
+        {{#if error}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>Error!&nbsp;</strong>{{error}}
+          </div>
+        {{else}}
+          <h5>
+            <strong>Ping Results</strong>
+          </h5>
+          {{#with getPingResult}}
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Host</th>
+                    <th>Success</th>
+                    <th>Failure</th>                    
+                    <th>Min Response Time</th>
+                    <th>Avg Response Time</th>
+                    <th>Max Response Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{_CompleteTime}}</td>
+                    <td>{{Host}}</td>
+                    <td>{{SuccessCount}}</td>
+                    <td>{{FailureCount}}</td>                    
+                    <td>{{MinimumResponseTime}}&nbsp;ms</td>
+                    <td>{{AverageResponseTime}}&nbsp;ms</td>
+                    <td>{{MaximumResponseTime}}&nbsp;ms</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          {{/with}}
+        {{/if}}
+      {{/if}}
+      {{#if loading}}
+        <div>
+          <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;Pinging ...</h1>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</template>

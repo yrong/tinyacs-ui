@@ -1,0 +1,38 @@
+# Meteor packages used by this project, one per line.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+insecure
+less
+http
+iron:router
+
+fontawesome4
+google-opensans-less
+smartadmin
+
+
+tsega:bootstrap3-datetimepicker
+mrt:moment
+mrt:just-i18n
+
+# Application as a package
+cc-layout
+#cpe-dashboard
+troubleshooting-wan
+device-group
+wifi-config
+security-config
+cc-backup-restore
+workflow
+wifi-diag
+fileserver
+dial-plan
+netop-configuration
+netop-sw-image
+device-unlink
+device-log
+cc-connect
+

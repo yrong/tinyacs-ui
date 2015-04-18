@@ -1,0 +1,22 @@
+.cc-header {
+    margin-bottom: 30px;
+}
+
+.connect-icon {
+    background-image: url('../img/connect_icon_333333.png');
+    background-size: 100%;
+    float: left;
+    height: 22px;
+    width: 23px;
+    margin-right: 5px;
+}
+
+@-moz-document url-prefix() {
+    .connect-icon {
+        height: 23px;
+    }
+}
+
+.bootstrapWizard li.fivesteps {
+    width: 20%;
+}

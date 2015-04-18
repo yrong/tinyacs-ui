@@ -1,0 +1,46 @@
+<template name="connect">
+  <!-- widget grid -->
+  <section id="widget-grid" class="">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div style="margin-bottom: 25px">
+          <h1 class="page-title no-margin">
+            <div class="connect-icon"></div>
+            {{i18n 'systemTools'}}
+            <span>&gt; {{i18n 'connectToGigaCenter'}}</span>
+          </h1>
+        </div>
+        <h1>{{i18n 'connectToGigaCenter'}}</h1>
+        <hr style="border-top-color:#ddd;">
+        <p>
+          <strong>
+            {{i18n 'connectToDeviceUi'}}
+          </strong>
+        </p>
+        {{#if loading}}
+          <div>
+            <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i>{{i18n 'preparingToConnect'}}</h1>
+          </div>
+        {{else}}
+          {{#if error}}
+            <div class="alert alert-danger fade in margin-top-20">
+              <button class="close" data-dismiss="alert">x</button>
+              <i class="fa-fw fa fa-times"></i>
+              <strong>
+                Error!
+              </strong>
+              {{error}}
+            </div>
+          {{else}}
+            <div>
+              <a href= {{remoteUrl}} target="_blank" class="cutThrough">
+                <button class="btn btn-orange">{{i18n 'connect'}}</button>
+              </a>
+            </div>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+  </section>
+  <!-- end widget grid -->
+</template>

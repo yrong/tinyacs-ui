@@ -1,0 +1,64 @@
+<template name="group">
+  <section id="widget-grid" class="">
+    <div class="row top-margin-20" id="deviceGroups">
+      <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+        <div style="margin-bottom: 25px">
+          <h1 class="page-title no-margin">
+            <div class="connect-icon"></div>{{i18n "networkOperations"}}
+            <span>&gt; {{i18n "deviceGroups"}}</span>
+          </h1>
+        </div>
+        <h1>{{i18n "deviceGroups"}}</h1>
+        <div id="confirmDialog" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+          <button class="btn-warning pull-right cancel" style="margin-top:-2px;margin-left:6px;">{{i18n 'cancel'}}</button>
+          <button class="btn-warning pull-right confirm" style="margin-top:-2px;">{{i18n 'confirm'}}</button>
+          <strong>{{i18n 'deletePrompt'}}{{i18n 'deviceGroup'}}</strong>
+          <span style="margin-left:10px;"></span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>{{i18n 'name'}}</th>
+                <th>{{i18n 'description'}}</th>
+                <th style="width:42px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each groups}}
+                <tr class="group">
+                  <td>{{name}}</td>
+                  <td>{{description}}</td>
+                  <td><i class="fa fa-lg fa-fw fa-trash-o"></i>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="pull-right">
+            <a>
+              <button type="submit" class="btn btn-orange">{{i18n "new"}} {{i18n "deviceGroup"}}</button>
+            </a>
+          </div>
+          <div style="clear:both;"></div>
+          {{#if error}}
+            <div class="alert alert-danger fade in margin-top-20">
+              <button class="close" data-dismiss="alert">x</button>
+              <i class="fa-fw fa fa-times"></i>
+
+              <strong>{{i18n 'error'}}</strong>
+              {{error}}
+            </div>
+          {{/if}}
+          <!--div class="pull-left" style="margin-left:10px">
+            <a href="network-operations-device-groups-static.html">
+                <button type="add" class="btn btn-orange">New Static Device Group</button>
+            </a>
+          </div-->
+        </div>
+      </div>
+    </div>
+  </section>
+</template>

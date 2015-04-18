@@ -1,0 +1,47 @@
+<template name="DeviceLog">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+                <div style="margin-bottom: 25px">
+                    <h1 class="page-title no-margin">
+                        <div class="connect-icon"></div>
+                      {{i18n 'systemTools'}}
+                        <span>&gt; {{i18n 'deviceLogs'}}</span>
+                    </h1>
+                </div>
+                <h1>{{i18n 'deviceLogs'}}</h1>
+                <hr style="border-top-color:#ddd;">
+                <div class="alert alert-warning fade in">
+                  <div style="margin-bottom: 10px">
+                      <strong>
+                          {{i18n 'deviceLogsHelp'}}
+                      </strong>
+                  </div>
+                  <div style="display: block;">
+                      <button class="btn btn-orange pull-right upload" disabled={{backupLoading}} style="padding: 4px 10px; margin-top: -5px;">{{i18n 'retrieveDeviceLog'}}</button>
+                      <strong>&nbsp;</strong>
+                  </div>
+                </div>
+                <div style="margin-top:20px">
+                    <strong>{{i18n 'status'}}&nbsp;&nbsp;
+                      {{#if backupLoading}}
+                          <i class="fa fa-cog fa-spin"></i>
+                      {{/if}}
+                    </strong>
+                    <div class="console-box" id="backup-status">
+                      {{#each backupResults}}
+                          <span>{{time}}</span>&nbsp;{{description}}
+                          {{#if downloadUrl}}
+                            <a href={{downloadUrl}} style="color: #0000FF;">
+                              <i class="fa fa-download"></i>{{i18n 'downloadDeviceLog'}}
+                            </a>  
+                          {{/if}}
+                          <br>
+                      {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+

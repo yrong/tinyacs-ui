@@ -1,0 +1,59 @@
+/* Main Part */
+
+html, body.smart-style-2 {
+  background-image: none;
+}
+#logo {
+  margin-top: 3px;
+}
+#header >:first-child {
+  margin: 0 6px;
+  min-width: 30px;
+  width: inherit;
+}
+#header >nth-child(2) {
+  width: 194px;
+}
+aside {
+  width: 220px;
+}
+/* END Main Part */
+
+/* Bootstrap3 customization */
+
+@brand-primary:      #43367d;
+@component-bg:       #e5e2ef;
+@component-hover-bg: #d9d4Ed;
+@component-active-bg: @brand-primary;
+
+//== nav-pills
+@nav-pills-link-bg:              @component-bg;
+@nav-pills-link-hover-bg:        @component-hover-bg;
+@nav-pills-active-link-hover-bg: @component-active-bg;
+
+.nav-pills > li {
+  > a {
+    & {
+      background-color: @component-bg;
+    }
+    &:hover {
+      background-color: @component-hover-bg;
+    }
+  }
+  // Active state
+  &.active > a {
+    &, &:hover, &:focus {
+      background-color: @nav-pills-active-link-hover-bg;
+    }
+  }
+}
+/* END Bootstrap3 */
+
+/* Responsive Part */
+
+@media (max-width: 880px) {
+  #logo {
+    margin-top: 0px;
+  }
+}
+/* END Responsive */

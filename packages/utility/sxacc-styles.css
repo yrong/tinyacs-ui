@@ -1,0 +1,12 @@
+.console-box {
+  border: 1px solid #ddd;
+  padding: 10px;
+  height: 250px;
+  box-shadow: inset 0 0 3px #ddd;
+  overflow: auto;
+  margin-top: 10px
+}
+
+.console-box > span {
+  color: #999;
+}

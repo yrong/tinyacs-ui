@@ -1,0 +1,306 @@
+
+fake = false;
+
+
+wlans = {
+  "InternetGatewayDevice": {
+    "LANDevice": {
+      "1": {
+        "WLANConfiguration": {
+          "1": {
+            "Enable": "true",
+            "Status": "Up",
+            "MaxBitRate": "Auto",
+            "Channel": "1",
+            "AutoChannelEnable": "true",
+            "SSID": "ron-24-1",
+            "Standard": "ac",
+            "SSIDAdvertisementEnabled": "true",
+            "RadioEnabled": "true",
+            "TotalBytesSent": "83411",
+            "TotalBytesReceived": "0",
+            "TotalPacketsSent": "111",
+            "TotalPacketsReceived": "222",
+            "X_000631_OperatingFrequencyBand": "2.4GHz",
+            "X_000631_OperatingChannelBandwidth": "20MHz",
+            "X_000631_EnableDfsChannels": "false",
+            "X_000631_ChannelUtilization": "0",
+            "X_000631_ChannelUtilization": "0",
+            "X_000631_ChannelFreeTime": "40",
+            "AssociatedDevice": {
+              "1": {
+                "AssociatedDeviceMACAddress": "f8:df:a8:8e:71:6b",
+                "AssociatedDeviceIPAddress": "0.0.0.0",
+                "AssociatedDeviceAuthenticationState": "false",
+                "LastRequestedUnicastCipher": "",
+                "LastRequestedMulticastCipher": "",
+                "LastPMKId": "",
+                "LastDataTransmitRate": "",
+                "X_000631_LastDataDownlinkRate": "40000",
+                "X_000631_LastDataUplinkRate": "30",
+                "X_000631_SignalStrength": "-90",
+                "X_000631_Retransmissions": "0",
+                "X_000631_Mode": "ac",
+                "X_BROADCOM_COM_Associated": "0",
+                "X_BROADCOM_COM_Authorized": "0",
+                "X_BROADCOM_COM_Ssid": "",
+                "X_BROADCOM_COM_Ifcname": ""
+              }
+            }
+          },
+          "2": {
+            "Enable": "true",
+            "Status": "Up",
+            "MaxBitRate": "Auto",
+            "Channel": "1",
+            "AutoChannelEnable": "true",
+            "SSID": "ron-24-2",
+            "Standard": "n",
+            "SSIDAdvertisementEnabled": "true",
+            "RadioEnabled": "true",
+            "TotalBytesSent": "83411",
+            "TotalBytesReceived": "0",
+            "TotalPacketsSent": "10",
+            "TotalPacketsReceived": "5",
+            "X_000631_OperatingFrequencyBand": "2.4GHz",
+            "X_000631_OperatingChannelBandwidth": "20MHz",
+            "X_000631_EnableDfsChannels": "false",
+            "X_000631_ChannelUtilization": "50",
+            "X_000631_ChannelInterferenceTime": "30",
+            "AssociatedDevice": {
+              "1": {
+                "AssociatedDeviceMACAddress": "f8:df:a8:8e:71:6c",
+                "AssociatedDeviceIPAddress": "0.0.0.0",
+                "AssociatedDeviceAuthenticationState": "false",
+                "LastRequestedUnicastCipher": "",
+                "LastRequestedMulticastCipher": "",
+                "LastPMKId": "",
+                "LastDataTransmitRate": "",
+                "X_000631_LastDataDownlinkRate": "40",
+                "X_000631_LastDataUplinkRate": "40",
+                "X_000631_SignalStrength": "-77",
+                "X_000631_Retransmissions": "0",
+                "X_000631_Mode": "bgn",
+                "X_BROADCOM_COM_Associated": "0",
+                "X_BROADCOM_COM_Authorized": "0",
+                "X_BROADCOM_COM_Ssid": "",
+                "X_BROADCOM_COM_Ifcname": ""
+              },
+              "2": {
+                "AssociatedDeviceMACAddress": "f8:df:a8:8e:71:70",
+                "AssociatedDeviceIPAddress": "0.0.0.0",
+                "AssociatedDeviceAuthenticationState": "false",
+                "LastRequestedUnicastCipher": "",
+                "LastRequestedMulticastCipher": "",
+                "LastPMKId": "",
+                "LastDataTransmitRate": "",
+                "X_000631_LastDataDownlinkRate": "100",
+                "X_000631_LastDataUplinkRate": "30",
+                "X_000631_SignalStrength": "-25",
+                "X_000631_Retransmissions": "0",
+                "X_000631_Mode": "ac",
+                "X_BROADCOM_COM_Associated": "0",
+                "X_BROADCOM_COM_Authorized": "0",
+                "X_BROADCOM_COM_Ssid": "",
+                "X_BROADCOM_COM_Ifcname": ""
+              }
+            }
+          },
+          "9": {
+            "Enable": "true",
+            "Status": "Up",
+            "MaxBitRate": "Auto",
+            "Channel": "50",
+            "AutoChannelEnable": "false",
+            "SSID": "ron-50-1",
+            "Standard": "a",
+            "SSIDAdvertisementEnabled": "true",
+            "RadioEnabled": "true",
+            "TotalBytesSent": "83411",
+            "TotalBytesReceived": "0",
+            "TotalPacketsSent": "15",
+            "TotalPacketsReceived": "60",
+            "X_000631_OperatingFrequencyBand": "5GHz",
+            "X_000631_OperatingChannelBandwidth": "40MHz",
+            "X_000631_EnableDfsChannels": "true",
+            "X_000631_ChannelUtilization": "80",
+            "X_000631_ChannelInterferenceTime": "10",
+            "X_000631_ChannelFreeTime": "10",
+            "AssociatedDevice": {
+              "1": {
+                "AssociatedDeviceMACAddress": "f8:df:a8:8e:71:6d",
+                "AssociatedDeviceIPAddress": "0.0.0.0",
+                "AssociatedDeviceAuthenticationState": "false",
+                "LastRequestedUnicastCipher": "",
+                "LastRequestedMulticastCipher": "",
+                "LastPMKId": "",
+                "LastDataTransmitRate": "",
+                "X_000631_LastDataDownlinkRate": "80000",
+                "X_000631_LastDataUplinkRate": "30",
+                "X_000631_SignalStrength": "-70",
+                "X_000631_Retransmissions": "0",
+                "X_000631_Mode": "n",
+                "X_BROADCOM_COM_Associated": "0",
+                "X_BROADCOM_COM_Authorized": "0",
+                "X_BROADCOM_COM_Ssid": "",
+                "X_BROADCOM_COM_Ifcname": ""
+              }
+            }
+          },
+          "10": {
+            "Enable": "true",
+            "Status": "Up",
+            "MaxBitRate": "Auto",
+            "Channel": "111",
+            "AutoChannelEnable": "true",
+            "SSID": "ron-50-2",
+            "Standard": "b",
+            "SSIDAdvertisementEnabled": "true",
+            "RadioEnabled": "true",
+            "TotalBytesSent": "83411",
+            "TotalBytesReceived": "0",
+            "TotalPacketsSent": "35788",
+            "TotalPacketsReceived": "133",
+            "X_000631_OperatingFrequencyBand": "5GHz",
+            "X_000631_OperatingChannelBandwidth": "40MHz",
+            "X_000631_EnableDfsChannels": "true",
+            "X_000631_ChannelUtilization": "10",
+            "X_000631_ChannelInterferenceTime": "10",
+            "AssociatedDevice": {
+              "1": {
+                "AssociatedDeviceMACAddress": "f8:df:a8:8e:71:6e",
+                "AssociatedDeviceIPAddress": "0.0.0.0",
+                "AssociatedDeviceAuthenticationState": "false",
+                "LastRequestedUnicastCipher": "",
+                "LastRequestedMulticastCipher": "",
+                "LastPMKId": "",
+                "LastDataTransmitRate": "",
+                "X_000631_LastDataDownlinkRate": "60000",
+                "X_000631_LastDataUplinkRate": "30",
+                "X_000631_SignalStrength": "-62",
+                "X_000631_Retransmissions": "0",
+                "X_000631_Mode": "n",
+                "X_BROADCOM_COM_Associated": "0",
+                "X_BROADCOM_COM_Authorized": "0",
+                "X_BROADCOM_COM_Ssid": "",
+                "X_BROADCOM_COM_Ifcname": ""
+              },
+              "2": {
+                "AssociatedDeviceMACAddress": "f8:df:a8:8e:71:71",
+                "AssociatedDeviceIPAddress": "0.0.0.0",
+                "AssociatedDeviceAuthenticationState": "false",
+                "LastRequestedUnicastCipher": "",
+                "LastRequestedMulticastCipher": "",
+                "LastPMKId": "",
+                "LastDataTransmitRate": "",
+                "X_000631_LastDataDownlinkRate": "80000",
+                "X_000631_LastDataUplinkRate": "30",
+                "X_000631_SignalStrength": "-25",
+                "X_000631_Retransmissions": "0",
+                "X_000631_Mode": "ac",
+                "X_BROADCOM_COM_Associated": "0",
+                "X_BROADCOM_COM_Authorized": "0",
+                "X_BROADCOM_COM_Ssid": "",
+                "X_BROADCOM_COM_Ifcname": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+lanHosts = {
+
+  "1": {
+    "IPAddress": "192.168.1.2",
+    "AddressSource": "DHCP",
+    "LeaseTimeRemaining": "86277",
+    "MACAddress": "f8:df:a8:8e:71:6b",
+    "VendorClassID": "dhcpcd-5.5.6",
+    "UserClassID": "",
+    "ClientID": "w",
+    "HostName": "iphone-76d1c0fdc9c26cc6",
+    "InterfaceType": "802.11",
+    "Active": "true",
+    "X_BROADCOM_COM_IfName": "wf0.0",
+    "Icon": "4",
+    "HostName_Alias": ""
+  },
+  "2": {
+    "IPAddress": "192.168.1.3",
+    "AddressSource": "DHCP",
+    "LeaseTimeRemaining": "86277",
+    "MACAddress": "f8:df:a8:8e:71:6c",
+    "VendorClassID": "dhcpcd-5.5.6",
+    "UserClassID": "",
+    "ClientID": "w",
+    "HostName": "ron's pc",
+    "InterfaceType": "802.11",
+    "Active": "true",
+    "X_BROADCOM_COM_IfName": "wf0.0",
+    "X_000631_Icon": 2,
+    "HostName_Alias": ""
+  },
+  "3": {
+    "IPAddress": "192.168.1.4",
+    "AddressSource": "DHCP",
+    "LeaseTimeRemaining": "86277",
+    "MACAddress": "f8:df:a8:8e:71:6d",
+    "VendorClassID": "dhcpcd-5.5.6",
+    "UserClassID": "",
+    "ClientID": "w",
+    "HostName": "android-76d1c0fdc9c26cc6",
+    "InterfaceType": "802.11",
+    "Active": "true",
+    "X_BROADCOM_COM_IfName": "wf0.0",
+    "X_000631_Icon": "1",
+    "HostName_Alias": ""
+  },
+  "4": {
+    "IPAddress": "192.168.1.5",
+    "AddressSource": "DHCP",
+    "LeaseTimeRemaining": "86277",
+    "MACAddress": "f8:df:a8:8e:71:6e",
+    "VendorClassID": "dhcpcd-5.5.6",
+    "UserClassID": "",
+    "ClientID": "w",
+    "HostName": "echo's pc",
+    "InterfaceType": "802.11",
+    "Active": "true",
+    "X_BROADCOM_COM_IfName": "wf0.0",
+    "X_000631_Icon": "2",
+    "HostName_Alias": ""
+  },
+  "5": {
+    "IPAddress": "192.168.1.6",
+    "AddressSource": "DHCP",
+    "LeaseTimeRemaining": "86277",
+    "MACAddress": "f8:df:a8:8e:71:70",
+    "VendorClassID": "dhcpcd-5.5.6",
+    "UserClassID": "",
+    "ClientID": "w",
+    "HostName": "ron's ps3",
+    "InterfaceType": "802.11",
+    "Active": "true",
+    "X_BROADCOM_COM_IfName": "wf0.0",
+    "X_000631_Icon": "8",
+    "HostName_Alias": ""
+  },
+  "6": {
+    "IPAddress": "192.168.1.7",
+    "AddressSource": "DHCP",
+    "LeaseTimeRemaining": "86277",
+    "MACAddress": "f8:df:a8:8e:71:71",
+    "VendorClassID": "dhcpcd-5.5.6",
+    "UserClassID": "",
+    "ClientID": "w",
+    "HostName": "echo's xbox-360",
+    "InterfaceType": "802.11",
+    "Active": "true",
+    "X_BROADCOM_COM_IfName": "wf0.0",
+    "Icon": "14",
+    "HostName_Alias": ""
+  }
+};

@@ -1,0 +1,162 @@
+<template name="workflowStatus">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+      <div style="margin-bottom: 25px">
+        <h1 class="page-title no-margin">
+          <div class="connect-icon"></div>
+          {{i18n "workflows"}}
+          <span>&gt;&nbsp;{{name}}</span>
+          {{> ccRefresh}}
+        </h1>
+      </div>
+      <h1 class="pull-left">{{name}}</h1>
+      <h5 id="head-pending" class="pull-right workflow-status" data-toggle="tooltip" data-placement="top" title="{{devicesTooltip 'pendingCount'}}" style="color:#ff9900;cursor:pointer;">
+        {{#if countSummaryReady}}
+          {{#if error}}
+            N/A
+          {{else}}
+            {{devicesPercent 'pendingCount'}}
+          {{/if}}
+        {{else}}
+          <i class="fa fa-spinner fa-spin"></i>
+        {{/if}}
+        &nbsp;Pending
+        <i class="fa fa-lg fa-fw fa-filter" style="display:none"></i>
+      </h5>
+      <h5 id="head-inprogress" class="pull-right workflow-status" data-toggle="tooltip" data-placement="top" title="{{devicesTooltip 'inProgressCount'}}" style="color:#3b9ff3;cursor:pointer;">
+        {{#if countSummaryReady}}
+          {{#if error}}
+            N/A
+          {{else}}
+            {{devicesPercent 'inProgressCount'}}
+          {{/if}}
+        {{else}}
+          <i class="fa fa-spinner fa-spin"></i>
+        {{/if}}
+        &nbsp;In Progress
+        <i class="fa fa-lg fa-fw fa-filter" style="display:none"></i>
+      </h5>
+      <h5 id="head-failed" class="pull-right workflow-status" data-toggle="tooltip" data-placement="top" title="{{devicesTooltip 'failureCount'}}" style="color:red;cursor:pointer;">
+        {{#if countSummaryReady}}
+          {{#if error}}
+            N/A
+          {{else}}
+            {{devicesPercent 'failureCount'}}
+          {{/if}}
+        {{else}}
+          <i class="fa fa-spinner fa-spin"></i>
+        {{/if}}
+        &nbsp;Failed
+        <i class="fa fa-lg fa-fw fa-filter" style="display:none"></i>
+      </h5>
+      <h5 id="head-succeeded" class="pull-right workflow-status" data-toggle="tooltip" data-placement="top" title="{{devicesTooltip 'successCount'}}" style="color:#2ecc71;cursor:pointer;">
+        {{#if countSummaryReady}}
+          {{#if error}}
+            N/A
+          {{else}}
+            {{devicesPercent 'successCount'}}
+          {{/if}}
+        {{else}}
+          <i class="fa fa-spinner fa-spin"></i>
+        {{/if}}
+        &nbsp;Succeed
+        <i class="fa fa-lg fa-fw fa-filter" style="display:none"></i>
+      </h5>
+      <h5 class="pull-right">
+        {{#if countSummaryReady}}
+          {{#if error}}
+            N/A
+          {{else}}
+            {{devicesPercent 'completeCount'}}
+          {{/if}}
+        {{else}}
+          <i class="fa fa-spinner fa-spin"></i>
+        {{/if}}
+        &nbsp;Complete
+      </h5>
+      <div style="clear:both"></div>
+      {{#if execLogsReady}}
+        {{#if error}}
+          <div class="alert alert-danger fade in margin-top-20">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>
+              Error!
+            </strong>
+            {{error}}
+          </div>
+        {{else}}
+          {{> statusTable}}
+        {{/if}}
+      {{else}}
+        <div style="clear:both"></div>
+        <div>
+          <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+<template name="statusTable">
+  <div class="table-responsive margin-top-10">
+    <table id="table-status" class="table table-hover">
+      <thead>
+        <tr>
+          <th>FSAN</th>
+          <th>IP Address</th>
+          <th>Model</th>
+          <th>SW Version</th>
+          <th>Status</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each result}}
+          <tr>
+            <td>{{serialNumber}}</td>
+            <td>{{ipAddress}}</td>
+            <td>{{modelName}}</td>
+            <td>{{softwareVersion}}</td>
+            <td style="white-space:pre;">{{state}}</td>
+            <td>{{time start}}</td>
+            <td>{{time end}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class="pull-left">
+    Showing
+    <span>
+      <strong>{{startNumber}}</strong>
+    </span>to
+    <span>
+      <strong>{{endNumber}}</strong>
+    </span>of
+    <span style="color:#3b9ff3">
+      <strong>{{count}}</strong>
+    </span>
+    entries
+  </div>
+
+  <div class="pull-right">
+    <ul class="pagination" style="margin:0;">
+      <li id="first">
+        <a href="javascript::void(0)"><i class="fa fa-angle-double-left"></i></a>
+      </li>
+      <li id="pre"><a href="javascript:void(0)"><i class="fa fa-angle-left"></i></a>
+      </li>
+      {{#each pageNumbers}}
+        <li id="{{pageNumber}}"><a href="javascript:void(0)">{{pageNumber}}</a>
+        </li>
+      {{/each}}
+      <li id="post"><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a>
+      </li>
+      <li id="last">
+        <a href="javascript::void(0)"><i class="fa fa-angle-double-right"></i></a>
+      </li>
+    </ul>
+  </div>
+</template>

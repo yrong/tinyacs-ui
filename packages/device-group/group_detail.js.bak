@@ -1,0 +1,343 @@
+var delRow = CpeRules.delRow;
+var setOperatorOptions = CpeRules.setOperatorOptions;
+var setValueOptions = CpeRules.setValueOptions;
+var setCascadeValue = CpeRules.setCascadeValue;
+var addRow = CpeRules.addRow;
+var getRulesFromUI = CpeRules.getRulesFromUI;
+
+var orgId;
+
+var initSession = function(){
+    Session.set('rule_error', null);
+    Session.set('group.nbi.error', null);
+    Session.set("currentPage", 1);
+    Session.set('totalInfo', null);
+    Session.set('cpes', []);
+    Session.set("pageSize",5);
+    Session.set("order",{'serialNumber':1});
+};
+
+var computation;
+
+var stopRun = function() {
+    if (computation) {
+        computation.stop();
+    }
+};
+
+var traverseCheck = function(filter) {
+    var valid = true;
+    if(!filter || !_.keys(filter).length)
+    {
+        Session.set('rule_error', 'rule is empty!');
+        return false;
+    }
+    for (var key in filter) {
+        if (!filter[key]) {
+            valid = false;
+            Session.set('rule_error', 'rule ' + key + ' is not valid!');
+            break;
+        }
+        if(key === '$regex'){
+            if(!filter[key].match(/^[a-z0-9]+$/i)){
+                valid = false;
+                Session.set('rule_error', 'rule FSAN contains invalid chars!');
+                break;
+            }
+        }
+        if (filter[key] !== null && typeof(filter[key]) == "object") {
+            valid = traverseCheck(filter[key]);
+            if (!valid) {
+                break;
+            }
+        }
+    }
+    return valid;
+};
+
+var checkRulesNotEmpty = function(filter) {
+    var valid = traverseCheck(filter);
+    return valid;
+};
+
+
+var checkFormValid = function() {
+    var validator = $('.group-form').bootstrapValidator({
+            message: 'This value is not valid',
+            fields: {
+                inputName: {
+                    message: 'Name is not valid',
+                    validators: {
+                        notEmpty: {
+                            message: 'Name is required and cannot be empty'
+                        },
+                        callback: {
+                            callback: function(value, validator, $field) {
+                                /*if(Session.get('selected')){
+                                    return true;
+                                }*/
+                                var groups = Session.get('groups');
+                                var find = false;
+                                _.each(groups,function(group){
+                                    if(group.name === value){
+                                        find = true;
+                                    }
+                                })
+                                if(find){
+                                   return {
+                                        valid: false,
+                                        message: 'group with this name already exists!'
+                                    }; 
+                                }
+                                return true;
+                            }
+                        } 
+                    }
+                }
+            }
+        })
+        .data('bootstrapValidator');
+    validator.validate();
+    var valid = validator.isValid();
+    if (!valid) {
+        return false;
+    }
+    return true;
+};
+
+
+var GroupDetailController = RouteController.extend({
+    template: 'groupdetail',
+
+    /*
+    onRun: function() {
+        orgId = Utils.getOrgId() ||'50';
+        initSession();
+        Meteor.call('deviceTypeGet', orgId, function(error, result) {
+                _.each(result, function(type) {
+                    DeviceTypes.upsert(type._id, type);
+                })
+                self.render();
+        });
+        this.next();
+    },*/
+
+    onStop: function() {
+        stopRun();
+    },
+
+    data: function() {
+        return Session.get('selected');
+    }
+});
+
+Template.groupdetail.created = function() {
+
+    orgId = Utils.getOrgId() || '50';
+    initSession();
+    Meteor.call('groupGet', orgId, function(error, result) {
+        Session.set("groups", result);
+        Meteor.call('deviceTypeGet', orgId, function(error, result) {
+            _.each(result, function(type) {
+                DeviceTypes.upsert(type._id, type);
+            })
+        });
+    });
+}
+
+Router.map(function() {
+    
+    this.route('groupdetail', {
+        path: '/groupdetail/:groupid',
+        controller: GroupDetailController,     
+    });
+
+    this.route('groupnew', {
+        path: '/groupdetail',
+        controller: GroupDetailController,
+    });
+});
+
+Template.groupdetail.rendered = function() {
+    CpeRules.setAdvancedUI();
+    if(Session.get('selected')){
+        $('.refresh-gray').click();
+    }
+};
+
+Template.groupdetail.helpers({
+	rules: CpeRules.getRules,
+    allowNew: CpeRules.allowNew,
+	getError: function(){
+		return Session.get('group.nbi.error') || Session.get('rule_error');
+	},
+    more: function(){
+        return this.length < CpeRules.allow_filters.length?'block':'none';
+    },
+    isText: CpeRules.isText,
+    isArray: CpeRules.isArray,
+    getOperatorOptions: CpeRules.getOperatorOptions,
+    getValueOptions: CpeRules.getValueOptions,
+    selected: function(){
+        return this.selected === true;
+    },
+    cpes: function() {
+        return Session.get('cpes');
+    },
+    total: function() {
+        return Session.get('totalInfo'); 
+    },
+    noMore: function(){
+        var info = Session.get('totalInfo'); 
+        return info.to === info.count ? 'disabled':'';
+    },
+    noPrev: function(){
+        var info = Session.get('totalInfo'); 
+        return info.page === 1 ?'disabled':'';
+    },
+    getIp: function(){
+        var regex = /^http:\/\/([0-9\.]+):([0-9]+)?(\S+)?$/;
+        var matched = this.connectionRequestUrl.match(regex);
+        return matched[1];
+    },
+    disabled: function(){
+        return Session.get("selected")
+    },
+});
+
+Template.groupdetail.events({
+
+    'click #addRow-0': function(event) {
+        Session.set('rule_error');
+        addRow();
+    },
+
+    'click [id^="deleteRow"]': function(event) {
+        Session.set('rule_error');
+        delRow(event.currentTarget);       
+    },
+
+    'change select[id^="inputKey"]': function(event) {
+        Session.set('rule_error');
+        setOperatorOptions(event.currentTarget);
+    },
+
+    'change select[id^="inputOperator"]': function(event) {
+        Session.set('rule_error');
+        setValueOptions(event.currentTarget);
+        setCascadeValue(event.currentTarget);
+    },
+
+    'change select[id^="inputValue"]': function(event) {
+        Session.set('rule_error');
+        setCascadeValue(event.currentTarget);
+    },
+
+    'click button[type="reset"]': function(event) {
+        event.preventDefault();
+        Session.set('rule_error');
+        Session.set('selected', null);
+        Router.go('/device-group');
+    },
+    'click button[type="submit"]': function(event) {
+        event.preventDefault();
+        var rule = getRulesFromUI();
+        Session.set('group.nbi.error');
+        Session.set('rule_error');
+        Meteor.setTimeout(function() {
+            if (!checkFormValid() || !checkRulesNotEmpty(rule)) {
+                return false;
+            }
+            var self = this;
+            var group, name, description, action;
+            name = $('#inputName').val();
+            description = $('#inputDescription').val();
+            action = 'groupAdd';
+            group = {
+                orgId: orgId,
+                name: name,
+                description: description,
+                cpeFilter: rule,
+                type: 'dynamic'
+            };
+            if (self._id) {
+                _.extend(group, {
+                    _id: self._id
+                })
+                action = 'groupModify';
+            }
+            Meteor.call(action, orgId, group, function(error, result) {
+                if (!error) {
+                    Router.go('device-group');
+                } else {
+                    Session.set('group.nbi.error', error.reason);
+                }
+            });
+        }, 100);
+              
+    },
+    'click .refresh-gray': function(event) {
+        var rule = getRulesFromUI();
+        Session.set('rule_error');
+        Meteor.setTimeout(function() {
+            if (!checkRulesNotEmpty(rule)) {
+                return false;
+            }
+            Session.set("currentPage", 1);
+
+            stopRun();
+
+            rule.orgId = orgId;
+
+            Meteor.call('getCountInfo', rule, Session.get("pageSize"), function(error, result) {
+                computation = Deps.autorun(function() {
+                    var pagesize = Session.get("pageSize");
+                    Meteor.call('getCpes', rule, Session.get("currentPage"), pagesize, Session.get("order"), function(error, cpes) {
+                        var startPage = Session.get("currentPage");
+                        result.page = startPage;
+                        result.from = (startPage - 1) * pagesize + 1;
+                        result.to = startPage * pagesize > result.count ? result.count : startPage * pagesize;
+                        Session.set('totalInfo', result);
+                        Session.set('cpes', cpes.result);
+                    });
+                });
+            });
+        }, 0);   
+    },
+    
+    'click .prev': function(event) {
+        var startPage = Session.get("currentPage");
+        if(startPage === 1)
+        {
+            return false;
+        }
+        startPage = startPage-1;
+        Session.set("currentPage",startPage);
+    },
+    'click .next': function(event) {
+        var startPage = Session.get("currentPage");
+        if(startPage>=this.pagenum) {
+            return false;
+        }
+        startPage = startPage+1;
+        Session.set("currentPage",startPage);
+    },
+    'change select[name="pagesize"]': function(e,t){
+        var pagesize = parseInt($(e.currentTarget).val());
+        Session.set("pageSize",pagesize);
+        $('.refresh-gray').click();
+     },
+     'click table[id="cpes"] tr th[name="serialNumber"]': function(e) {
+        var e$ = $(e.currentTarget)
+        if(e$.hasClass('sorting_asc')){
+            e$.removeClass('sorting_asc');
+            e$.addClass('sorting_desc');
+            Session.set("order",{'serialNumber':-1});
+        }else{
+            e$.removeClass('sorting_desc');
+            e$.addClass('sorting_asc');
+            Session.set("order",{'serialNumber':1});
+        }
+        Session.set("currentPage",1);
+     }
+});
