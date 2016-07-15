@@ -9,10 +9,10 @@ Package.on_use(function(api) {
 
   // -- bootstrap3 - customized
   api.add_files('bootstrap3/bootstrap.css', 'client');
-  api.add_files('bootstrap3/fonts/glyphicons-halflings-regular.eot', 'client');
-  api.add_files('bootstrap3/fonts/glyphicons-halflings-regular.ttf', 'client');
-  api.add_files('bootstrap3/fonts/glyphicons-halflings-regular.svg', 'client');
-  api.add_files('bootstrap3/fonts/glyphicons-halflings-regular.woff', 'client');
+  api.addAssets('bootstrap3/fonts/glyphicons-halflings-regular.eot', 'client');
+  api.addAssets('bootstrap3/fonts/glyphicons-halflings-regular.ttf', 'client');
+  api.addAssets('bootstrap3/fonts/glyphicons-halflings-regular.svg', 'client');
+  api.addAssets('bootstrap3/fonts/glyphicons-halflings-regular.woff', 'client');
 
   // -- css
   api.add_files('css/smartadmin-production.css', 'client');
@@ -65,41 +65,41 @@ Package.on_use(function(api) {
 
 
   // -- img
-  api.add_files('img/clear.png', 'client');
-  api.add_files('img/ajax-loader.gif', 'client');
-  api.add_files('img/jcrop/Jcrop.gif', 'client');
-  api.add_files('img/saturation.png', 'client');
-  api.add_files('img/dropzone/spritemap@2x.png', 'client');
-  api.add_files('img/dropzone/spritemap.png', 'client');
-  api.add_files('img/flags/flags.png', 'client');
-  api.add_files('img/gradient/login.png', 'client');
-  api.add_files('img/loading.gif', 'client');
-  api.add_files('img/jqueryui/ui-bg_glass_75_dadada_1x400.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_555555_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_glass_75_ffffff_1x400.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_cd0a0a_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_f6cf3b_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_flat_0_aaaaaa_40x100.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_ffffff_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_888888_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_glass_75_e6e6e6_1x400.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_glass_65_ffffff_1x400.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_highlight-soft_75_cccccc_1x100.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_2e83ff_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_glass_55_fbf9ee_1x400.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_222222_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_454545_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_f0ad4e_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_inset-soft_95_fef1ec_1x100.png', 'client');
-  api.add_files('img/jqueryui/ui-bg_flat_0_999999_40x100.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_428bca_256x240.png', 'client');
-  api.add_files('img/jqueryui/ui-icons_999999_256x240.png', 'client');
-  api.add_files('img/alpha.png', 'client');
-  api.add_files('img/hue.png', 'client');
-  api.add_files('img/pattern/overlay-pattern.png', 'client');
-  api.add_files('img/mybg.png', 'client');
-  api.add_files('img/select2-spinner.gif', 'client');
-  api.add_files('img/voicecommand/active-btn.gif', 'client');
+  api.addAssets('img/clear.png', 'client');
+  api.addAssets('img/ajax-loader.gif', 'client');
+  api.addAssets('img/jcrop/Jcrop.gif', 'client');
+  api.addAssets('img/saturation.png', 'client');
+  api.addAssets('img/dropzone/spritemap@2x.png', 'client');
+  api.addAssets('img/dropzone/spritemap.png', 'client');
+  api.addAssets('img/flags/flags.png', 'client');
+  api.addAssets('img/gradient/login.png', 'client');
+  api.addAssets('img/loading.gif', 'client');
+  api.addAssets('img/jqueryui/ui-bg_glass_75_dadada_1x400.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_555555_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_glass_75_ffffff_1x400.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_cd0a0a_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_f6cf3b_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_flat_0_aaaaaa_40x100.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_ffffff_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_888888_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_glass_75_e6e6e6_1x400.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_glass_65_ffffff_1x400.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_highlight-soft_75_cccccc_1x100.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_2e83ff_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_glass_55_fbf9ee_1x400.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_222222_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_454545_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_f0ad4e_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_inset-soft_95_fef1ec_1x100.png', 'client');
+  api.addAssets('img/jqueryui/ui-bg_flat_0_999999_40x100.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_428bca_256x240.png', 'client');
+  api.addAssets('img/jqueryui/ui-icons_999999_256x240.png', 'client');
+  api.addAssets('img/alpha.png', 'client');
+  api.addAssets('img/hue.png', 'client');
+  api.addAssets('img/pattern/overlay-pattern.png', 'client');
+  api.addAssets('img/mybg.png', 'client');
+  api.addAssets('img/select2-spinner.gif', 'client');
+  api.addAssets('img/voicecommand/active-btn.gif', 'client');
 
   // Less variables
   //api.add_files('import/variables.import.less', 'client');

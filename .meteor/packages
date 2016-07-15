@@ -4,6 +4,7 @@
 # but you can also edit it by hand.
 
 meteor-platform
+
 insecure
 less
 http
@@ -15,7 +16,7 @@ smartadmin
 
 
 tsega:bootstrap3-datetimepicker
-mrt:moment
+
 mrt:just-i18n
 
 # Application as a package

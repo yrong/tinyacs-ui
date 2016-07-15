@@ -1,3 +1,5 @@
 packages/*/.build
 packages/*/versions.json
 *~
+._.DS_Store
+*/\\.DS_Store

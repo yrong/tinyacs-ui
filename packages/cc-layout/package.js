@@ -10,5 +10,5 @@ Package.on_use(function(api) {
 
   api.add_files(['cc-layout.html', 'cc-layout.js'], 'client');
 
-  api.add_files('img/commandcenter-h82.png', 'client');
+  api.addAssets('img/commandcenter-h82.png', 'client');
 });
